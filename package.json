@@ -1,0 +1,8 @@
+{
+  "name": "genesis-vision-options",
+  "version": "1.0.0",
+  "description": "Genesis vision option smart contract",
+  "dependencies": {
+    "zeppelin-solidity": "^1.1.0"
+  }
+}
