@@ -5,8 +5,8 @@ import './GVOptionToken.sol';
 contract GVOptionToken10 is GVOptionToken {
     
     // Constants
-    string public constant name = "Genesis Vision Option Token with 5% bonus";
-    string public constant symbol = "GVOT5";
+    string public constant name = "Genesis Vision Option Token with 10% bonus";
+    string public constant symbol = "GVOT10";
     uint   public constant decimals = 18;
 
     uint constant TOKEN_LIMIT = 1650000 * 1e18;
