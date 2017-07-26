@@ -1,6 +1,7 @@
 pragma solidity ^0.4.11;
 
 import './GVOptionToken.sol';
+import './GVOptionToken5.sol';
 
 contract GVOptionProgram {
 
@@ -23,7 +24,7 @@ contract GVOptionProgram {
     OptionsSellingState optionsSellingState = OptionsSellingState.Created;
     
     function GVOptionProgram(address _gvAgent, address _team) {
-        gvOptionToken = new GVOptionToken(this);
+        gvOptionToken = new GVOptionToken5(this); // TODO
         gvAgent = _gvAgent;
         team = _team;
     }

@@ -1,6 +1,7 @@
 pragma solidity ^0.4.11;
 
 import './GVTToken.sol';
+import './GVOptionProgram.sol';
 
 contract ICO {
 
@@ -19,17 +20,18 @@ contract ICO {
     address public team;    // team account
 
     GVTToken gvtToken;
+    GVOptionProgram optionProgram;
 
     // Modifiers
     modifier teamOnly { require(msg.sender == team); _; }
     modifier gvAgentOnly { require(msg.sender == gvAgent); _; }
 
     enum IcoState { Created, Running, Paused, Finished }
-    IcoState icoState = IcoState.Created;
-
+    IcoState public icoState = IcoState.Created;
 
     function ICO(address _gvAgent, address _team) {
         gvtToken = new GVTToken(this);
+        optionProgram = new GVOptionProgram(_gvAgent, _team);
         gvAgent = _gvAgent;
         team = _team;
     }

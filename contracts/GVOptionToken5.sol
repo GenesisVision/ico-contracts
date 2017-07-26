@@ -11,6 +11,10 @@ contract GVOptionToken5 is GVOptionToken {
 
     uint constant TOKEN_LIMIT = 3300000 * 1e18;
   
+    function GVOptionToken5(address _optionProgram) {
+        optionProgram = _optionProgram;
+    }
+
     function buyOptions(address buyer, uint value, string tx) {
         require(msg.sender == optionProgram);
         require(value > 0);
