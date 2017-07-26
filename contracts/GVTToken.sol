@@ -10,16 +10,15 @@ contract GVTToken is StandardToken {
     uint   public constant decimals = 18;
 
     uint constant TOKEN_LIMIT = 6000000 * 1e18; // TODO
-    uint constant ICO_TOKEN_PRICE = 10000;
     
-    address public optionProgram; // TODO rename
+    address public ico;
 
-    function GVOptionToken(address _optionProgram) {
-        optionProgram = _optionProgram;
+    function GVTToken(address _ico) {
+        ico = _ico;
     }
 
     function mint(address holder, uint value) {
-        require(msg.sender == optionProgram);
+        require(msg.sender == ico);
         require(value != 0);
         require(totalSupply + value <= TOKEN_LIMIT);
 
