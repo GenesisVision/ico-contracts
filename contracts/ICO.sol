@@ -36,19 +36,20 @@ contract ICO {
         team = _team;
     }
 
-    function startOptionsSelling() external teamOnly {
+    function startIco() external teamOnly {
+        RunIco();
         require(icoState == IcoState.Created || icoState == IcoState.Paused);
         icoState = IcoState.Running;
         RunIco();
     }
 
-    function pauseOptionsSelling() external teamOnly {
+    function pauseIco() external teamOnly {
         require(icoState == IcoState.Running);
         icoState = IcoState.Paused;
         PauseIco();
     }
 
-    function finishOptionsSelling() external teamOnly {
+    function finishIco() external teamOnly {
         require(icoState == IcoState.Running || icoState == IcoState.Paused);
         icoState = IcoState.Finished;
         FinishIco();
