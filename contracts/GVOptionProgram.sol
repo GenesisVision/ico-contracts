@@ -17,6 +17,7 @@ contract GVOptionProgram {
     event PauseOptionsSelling();
     event FinishOptionsSelling();
 
+    event BuyOptions(address buyer, uint amount, string tx, uint8 optionType);
     // State variables
     address public gvAgent; // payments bot account
     address public team;    // team account
@@ -64,49 +65,41 @@ contract GVOptionProgram {
     {
         require(optionsSellingState == OptionsSellingState.Running);
         require(usdCents > 0);
-        var remainUsdCents = usdCents;
 
-        var availableTokens15 = gvOptionToken15.remainingTokensCount(); 
-        if (availableTokens15 > 0) {
-            var tokens15 = remainUsdCents * options15perCent;
-            var tokensToBuy = 0;
-            if(availableTokens15 >= tokens15) {
-                gvOptionToken15.buyOptions(buyer, tokensToBuy, txHash);
-                return; // TODO
-            }
-            else {
-                gvOptionToken15.buyOptions(buyer, availableTokens15, txHash);
-                remainUsdCents -= availableTokens15 / options15perCent;
-            }
+        var remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken15, 0, options15perCent);
+        if (remainUsdCents <= 0) {
+            return;
         }
 
-        var availableTokens10 = gvOptionToken10.remainingTokensCount(); 
-        if (availableTokens10 > 0) {
-            var tokens10 = remainUsdCents * options10perCent;
-            var tokensToBuy = 0;
-            if(availableTokens10 >= tokens10) {
-                gvOptionToken10.buyOptions(buyer, tokensToBuy, txHash);
-                return; // TODO
-            }
-            else {
-                gvOptionToken10.buyOptions(buyer, availableTokens10, txHash);
-                remainUsdCents -= availableTokens10 / options10perCent;
-            }
+        remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken10, 1, options10perCent);
+        if (remainUsdCents <= 0) {
+            return;
         }
 
-        var availableTokens5 = gvOptionToken5.remainingTokensCount(); 
-        if (availableTokens5 > 0) {
-            var tokens5 = remainUsdCents * options10perCent;
-            var tokensToBuy = 0;
-            if(availableTokens5 >= tokens5) {
-                gvOptionToken5.buyOptions(buyer, tokensToBuy, txHash);
-                return; // TODO
-            }
-            else {
-                gvOptionToken5.buyOptions(buyer, availableTokens5, txHash);
-                remainUsdCents -= availableTokens5 / options10perCent;
-            }
+        remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken5, 2, options5perCent);
+        if (remainUsdCents <= 0) {
+            return;
         }
-        //BuyTokens(buyer, tokens, txHash);
     }   
+
+    function buyIfAvailable(address buyer, uint usdCents, string txHash,
+        GVOptionToken optionToken, uint8 optionType, uint optionsPerCent)
+        private returns (uint) {
+        
+        var availableTokens = optionToken.remainingTokensCount(); 
+        if (availableTokens > 0) {
+            var tokens = usdCents * optionsPerCent;
+            if(availableTokens >= tokens) {
+                optionToken.buyOptions(buyer, tokens, txHash);
+                BuyOptions(buyer, tokens, txHash, optionType);
+                return 0;
+            }
+            else {
+                optionToken.buyOptions(buyer, availableTokens, txHash);
+                BuyOptions(buyer, tokens, txHash, optionType);
+                return usdCents - availableTokens / optionsPerCent;
+            }
+        }
+        return usdCents;
+    }
 }
