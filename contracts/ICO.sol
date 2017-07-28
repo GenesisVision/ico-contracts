@@ -20,7 +20,7 @@ contract ICO {
     address public team;    // team account
 
     GVTToken public gvtToken;
-    GVOptionProgram optionProgram;
+    GVOptionProgram public optionProgram;
 
     // Modifiers
     modifier teamOnly { require(msg.sender == team); _; }
@@ -56,15 +56,28 @@ contract ICO {
         FinishIco();
     }    
 
-    function buyTokens(address buyer, uint usdValue, string txHash)
+    function buyTokens(address buyer, uint usdCents, string txHash)
         external gvAgentOnly
     {
         require(icoState == IcoState.Running);
-        require(usdValue > 0);
-        uint tokens = usdValue * 1e17; // TODO check it
+        require(usdCents > 0);
+        uint tokens = usdCents * 1e15; // TODO check it
         require(tokensSold + tokens <= TOKENS_FOR_SALE);
 
         gvtToken.mint(buyer, tokens);
         BuyTokens(buyer, tokens, txHash);
     }
+
+    function buyOptions(address buyer, uint usdCents, string txHash)
+        external gvAgentOnly
+    {
+        require(icoState == IcoState.Running);
+        require(usdCents > 0);
+        uint tokens = usdCents * 1e17; // TODO check it
+        require(tokensSold + tokens <= TOKENS_FOR_SALE);
+
+        gvtToken.mint(buyer, tokens);
+        BuyTokens(buyer, tokens, txHash);
+    }
+
 }

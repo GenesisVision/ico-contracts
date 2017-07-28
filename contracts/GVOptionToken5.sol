@@ -24,4 +24,8 @@ contract GVOptionToken5 is GVOptionToken {
         totalSupply += value;
         Transfer(0x0, buyer, value);
     }
+    
+    function remainingTokensCount() returns(uint) {
+        return TOKEN_LIMIT - totalSupply;
+    }
 }

@@ -12,17 +12,21 @@ contract GVOptionToken15 is GVOptionToken {
     uint constant TOKEN_LIMIT = 575000 * 1e18;
     uint constant ICO_TOKEN_PRICE = 869;
 
-    function buyOptions(address buyer, uint usdValueX100, string tx) {
+    function GVOptionToken15(address _optionProgram) {
+        optionProgram = _optionProgram;
+    }
+
+    function buyOptions(address buyer, uint value, string tx) {
         require(msg.sender == optionProgram);
-        require(usdValueX100 > 0);
+        require(value > 0);
+        require(totalSupply + value <= TOKEN_LIMIT);
 
-        uint tokensCount = (usdValueX100 * 2) / 1000; // TODO
-
-        require(totalSupply + tokensCount <= TOKEN_LIMIT);
-
-        balances[buyer] += tokensCount;
-        totalSupply += tokensCount;
-        Transfer(0x0, buyer, tokensCount);
-        BuyOptions(buyer, usdValueX100, tx);
+        balances[buyer] += value;
+        totalSupply += value;
+        Transfer(0x0, buyer, value);
+    }
+    
+    function remainingTokensCount() returns(uint) {
+        return TOKEN_LIMIT - totalSupply;
     }
 }

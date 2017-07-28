@@ -10,7 +10,9 @@ contract GVOptionToken is StandardToken {
     address public optionProgram;
 
     function buyOptions(address buyer, uint value, string tx);
-
+    
+    function remainingTokensCount() returns(uint);
+    
     // TODO ICO program???
     // Only OptionProgram can execute the option after charging GVT tokens
     function executeOption(address addr, uint optionsCount) {
