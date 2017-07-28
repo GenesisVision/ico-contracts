@@ -63,7 +63,8 @@ contract ICO {
         require(usdCents > 0);
         uint tokens = usdCents * 1e15; // TODO check it
         require(tokensSold + tokens <= TOKENS_FOR_SALE);
-
+        tokensSold += tokens;
+        
         gvtToken.mint(buyer, tokens);
         BuyTokens(buyer, tokens, txHash);
     }
@@ -71,13 +72,7 @@ contract ICO {
     function buyOptions(address buyer, uint usdCents, string txHash)
         external gvAgentOnly
     {
-        require(icoState == IcoState.Running);
-        require(usdCents > 0);
-        uint tokens = usdCents * 1e17; // TODO check it
-        require(tokensSold + tokens <= TOKENS_FOR_SALE);
-
-        gvtToken.mint(buyer, tokens);
-        BuyTokens(buyer, tokens, txHash);
+        optionProgram.buyOptions(buyer, usdCents, txHash);
     }
 
 }

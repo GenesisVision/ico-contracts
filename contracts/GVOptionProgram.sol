@@ -42,7 +42,7 @@ contract GVOptionProgram {
         team = _team;
     }
 
-    function startOptionsSelling() external teamOnly {
+    function startOptionsSelling() external teamOnly { // TODO fix external
         require(optionsSellingState == OptionsSellingState.Created || optionsSellingState == OptionsSellingState.Paused);
         optionsSellingState = OptionsSellingState.Running;
         StartOptionsSelling();
@@ -77,9 +77,7 @@ contract GVOptionProgram {
         }
 
         remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken5, 2, options5perCent);
-        if (remainUsdCents <= 0) {
-            return;
-        }
+        // TODO
     }   
 
     function buyIfAvailable(address buyer, uint usdCents, string txHash,

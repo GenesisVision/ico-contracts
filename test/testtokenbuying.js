@@ -26,7 +26,7 @@ contract('ICO', function (accounts) {
     });
 
     it("should buy 1 token per 10 usd", () => {
-        return ico.buyTokens(account1, 10, "test")
+        return ico.buyTokens(account1, 1000, "test")
             .then(() => {
                 return gvt.balanceOf.call(account1)
             })
@@ -36,7 +36,7 @@ contract('ICO', function (accounts) {
     });
 
     it("should buy 5 token per 50 usd", () => {
-        return ico.buyTokens(account2, 50, "test")
+        return ico.buyTokens(account2, 5000, "test")
             .then(() => {
                 return gvt.balanceOf.call(account2)
             })
@@ -45,7 +45,7 @@ contract('ICO', function (accounts) {
             });
     });
     it("should buy 101 token per 1010 usd", () => {
-        return ico.buyTokens(account3, 1010, "test")
+        return ico.buyTokens(account3, 101000, "test")
             .then(() => {
                 return gvt.balanceOf.call(account3)
             })
