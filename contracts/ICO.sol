@@ -28,7 +28,7 @@ contract ICO {
 
     uint tokensSold = 0;
 
-    enum IcoState { Created, Running, Paused, Finished }
+    enum IcoState { Created, RunningForOptionsHolders, Running, Paused, Finished }
     IcoState public icoState = IcoState.Created;
 
     function ICO( address _team, address _gvAgent) {
@@ -38,8 +38,15 @@ contract ICO {
         team = _team;
     }
 
-    function startIco() external teamOnly {
+    function StartIcoForOption() external teamOnly {
         require(icoState == IcoState.Created || icoState == IcoState.Paused);
+        icoState = IcoState.RunningForOptionsHolders;
+        RunIco();
+    }
+
+    function startIco() external teamOnly {
+        require(icoState == IcoState.RunningForOptionsHolders || icoState == IcoState.Paused);
+        optionProgram.finishOptionsSelling();
         icoState = IcoState.Running;
         RunIco();
     }
@@ -61,6 +68,9 @@ contract ICO {
     {
         require(icoState == IcoState.Running);
         require(usdCents > 0);
+
+        optionProgram.executeOptions(buyer, usdCents, txHash);
+
         uint tokens = usdCents * 1e15; // TODO check it
         require(tokensSold + tokens <= TOKENS_FOR_SALE);
         tokensSold += tokens;

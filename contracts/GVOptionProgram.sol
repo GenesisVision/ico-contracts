@@ -12,6 +12,10 @@ contract GVOptionProgram {
     uint options10perCent = 22 * 1e15;
     uint options5perCent  = 21 * 1e15;
 
+    uint option15gvtPrice = 1000; // TODO
+    uint option10gvtPrice = 1000; // TODO
+    uint option5gvtPrice  = 1000; // TODO
+
     // Events
     event StartOptionsSelling();
     event PauseOptionsSelling();
@@ -60,6 +64,27 @@ contract GVOptionProgram {
         FinishOptionsSelling();
     }  
 
+    function executeOptions(address buyer, uint usdCents, string txHash)
+        returns (uint) {
+        require(optionsSellingState == OptionsSellingState.Finished);
+        require(usdCents > 0);
+
+        var remainUsdCents = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken15, 0, option15gvtPrice);
+        if (remainUsdCents <= 0) {
+            return 0;
+        }
+
+        remainUsdCents = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken10, 1, option10gvtPrice);
+        if (remainUsdCents <= 0) {
+            return 0;
+        }
+
+        remainUsdCents = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken5, 2, option5gvtPrice);
+        
+        return remainUsdCents;
+        // TODO
+    }
+
     function buyOptions(address buyer, uint usdCents, string txHash)
         external gvAgentOnly
     {
@@ -79,6 +104,14 @@ contract GVOptionProgram {
         remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken5, 2, options5perCent);
         // TODO
     }   
+
+    function executeIfAvailable(address buyer, uint usdCents, string txHash,
+        GVOptionToken optionToken, uint8 optionType, uint gvOptionToken)
+        private returns (uint) {
+
+        return 0;
+        // TODO
+    }
 
     function buyIfAvailable(address buyer, uint usdCents, string txHash,
         GVOptionToken optionToken, uint8 optionType, uint optionsPerCent)

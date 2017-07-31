@@ -19,7 +19,7 @@ contract GVTToken is StandardToken {
 
     function mint(address holder, uint value) {
         require(msg.sender == ico);
-        require(value != 0);
+        require(value > 0);
         require(totalSupply + value <= TOKEN_LIMIT);
 
         balances[holder] += value;
