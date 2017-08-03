@@ -57,9 +57,17 @@ contract ICO {
         PauseIco();
     }
 
-    function finishIco() external teamOnly {
+    function finishIco(address _team, address _fund, address _bounty) external teamOnly {
         require(icoState == IcoState.Running || icoState == IcoState.Paused);
         icoState = IcoState.Finished;
+        
+        uint mintedTokens = gvtToken.totalSupply();
+        uint totalAmount = mintedTokens * 100 / 73;
+
+        snm.mint(_team, 3 * totalAmount / 20);
+        snm.mint(_fund, totalAmount / 10);
+        snm.mint(_bounty, 3 * totalAmount / 200);
+
         FinishIco();
     }    
 
@@ -84,5 +92,4 @@ contract ICO {
     {
         optionProgram.buyOptions(buyer, usdCents, txHash);
     }
-
 }

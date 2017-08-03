@@ -15,15 +15,15 @@ contract GVOptionProgram {
 
     string public constant option15name = "Genesis Vision Option Token with 15% bonus";
     string public constant option10name = "Genesis Vision Option Token with 10% bonus";
-    string public constant option5name = "Genesis Vision Option Token with 5% bonus";
+    string public constant option5name  = "Genesis Vision Option Token with 5% bonus";
 
     string public constant option15symbol = "GVOT15";
     string public constant option10symbol = "GVOT10";
-    string public constant option5symbol = "GVOT5";
+    string public constant option5symbol  = "GVOT5";
 
     uint constant option15_TOKEN_LIMIT = 575000 * 1e18;
     uint constant option10_TOKEN_LIMIT = 1650000 * 1e18;
-    uint constant option5_TOKEN_LIMIT = 3300000 * 1e18;
+    uint constant option5_TOKEN_LIMIT  = 3300000 * 1e18;
 
     // Events
     event StartOptionsSelling();
