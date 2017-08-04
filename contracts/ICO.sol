@@ -62,29 +62,46 @@ contract ICO {
         icoState = IcoState.Finished;
         
         uint mintedTokens = gvtToken.totalSupply();
-        uint totalAmount = mintedTokens * 100 / 73;
+        uint totalAmount = mintedTokens * 200 / 147;
 
-        snm.mint(_team, 3 * totalAmount / 20);
-        snm.mint(_fund, totalAmount / 10);
-        snm.mint(_bounty, 3 * totalAmount / 200);
+        gvtToken.mint(_team, 3 * totalAmount / 20);
+        gvtToken.mint(_fund, totalAmount / 10);
+        gvtToken.mint(_bounty, 3 * totalAmount / 200);
 
         FinishIco();
     }    
 
     function buyTokens(address buyer, uint usdCents, string txHash)
         external gvAgentOnly
+        returns (uint)
     {
-        require(icoState == IcoState.Running);
+        require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
         require(usdCents > 0);
 
-        optionProgram.executeOptions(buyer, usdCents, txHash);
+        uint executedTokens; 
+        uint remainingCents;
+        (executedTokens, remainingCents) = optionProgram.executeOptions(buyer, usdCents, txHash);
 
-        uint tokens = usdCents * 1e15; // TODO check it
-        require(tokensSold + tokens <= TOKENS_FOR_SALE);
-        tokensSold += tokens;
-        
-        gvtToken.mint(buyer, tokens);
-        BuyTokens(buyer, tokens, txHash);
+        if (executedTokens > 0) {
+            require(tokensSold + executedTokens <= TOKENS_FOR_SALE);
+            tokensSold += executedTokens;
+            
+            gvtToken.mint(buyer, executedTokens);
+            BuyTokens(buyer, executedTokens, txHash);
+        }
+
+        if (icoState == IcoState.Running) {
+            uint tokens = remainingCents * 1e15; // TODO check it
+            require(tokensSold + tokens <= TOKENS_FOR_SALE);
+            tokensSold += tokens;
+            
+            gvtToken.mint(buyer, tokens);
+            BuyTokens(buyer, tokens, txHash);
+
+            return 0;
+        } else {
+            return remainingCents;
+        }
     }
 
     function buyOptions(address buyer, uint usdCents, string txHash)

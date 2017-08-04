@@ -31,6 +31,8 @@ contract GVOptionProgram {
     event FinishOptionsSelling();
 
     event BuyOptions(address buyer, uint amount, string tx, uint8 optionType);
+    event ExecuteOptions(address buyer, uint amount, string tx, uint8 optionType);
+
     // State variables
     address public gvAgent; // payments bot account
     address public team;    // team account
@@ -74,23 +76,25 @@ contract GVOptionProgram {
     }  
 
     function executeOptions(address buyer, uint usdCents, string txHash)
-        returns (uint) {
+        returns (uint executedTokens, uint remainingCents) {
         require(optionsSellingState == OptionsSellingState.Finished);
         require(usdCents > 0);
 
-        var remainUsdCents = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken15, 0, option15gvtPrice);
-        if (remainUsdCents <= 0) {
-            return 0;
+        (executedTokens, remainingCents) = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken15, 0, option15gvtPrice);
+        if (remainingCents <= 0) {
+            return (executedTokens, 0);
         }
 
-        remainUsdCents = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken10, 1, option10gvtPrice);
-        if (remainUsdCents <= 0) {
-            return 0;
+        uint executed10;
+        (executed10, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken10, 1, option10gvtPrice);
+        if (remainingCents <= 0) {
+            return (executedTokens + executed10, 0);
         }
 
-        remainUsdCents = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken5, 2, option5gvtPrice);
+        uint executed5;
+        (executed5, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken5, 2, option5gvtPrice);
         
-        return remainUsdCents;
+        return (executedTokens + executed5, remainingCents);
         // TODO
     }
 
@@ -116,9 +120,9 @@ contract GVOptionProgram {
 
     function executeIfAvailable(address buyer, uint usdCents, string txHash,
         GVOptionToken optionToken, uint8 optionType, uint gvOptionToken)
-        private returns (uint) {
+        private returns (uint, uint) {
 
-        return 0;
+        return (0, 0);
         // TODO
     }
 
