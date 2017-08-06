@@ -45,13 +45,13 @@ contract('GVOptionProgram', function (accounts) {
         });
     });
 
-    it("should buy 230 tokens per 10 usd", () => {
+    it("should buy 260 tokens per 10 usd", () => {
         return ico.buyOptions(account1, 1000, "test")
             .then(() => {
                 return gvOptionToken30.balanceOf.call(account1)
             })
             .then((b) => {
-                assert.equal(23 * 1e18, b.valueOf(), "Balance should be 230");
+                assert.equal(260 * 1e18, b.valueOf(), "Balance should be 260");
             });
     });
 });
