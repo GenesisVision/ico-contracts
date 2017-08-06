@@ -9,7 +9,7 @@ contract GVOptionProgram {
     uint option20perCent = 22 * 1e15;
     uint option10perCent  = 21 * 1e15;
 
-    uint option30gvtPrice = 1000; // TODO
+    uint option30gvtPrice = 1000; // TODO  /* /!\ should be USD-cent price to execute one option */
     uint option20gvtPrice = 1000; // TODO
     uint option10gvtPrice  = 1000; // TODO
 
