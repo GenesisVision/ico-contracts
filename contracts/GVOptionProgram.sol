@@ -5,25 +5,25 @@ import './GVOptionToken.sol';
 contract GVOptionProgram {
 
     // Constants
-    uint option15perCent = 23 * 1e15;
-    uint option10perCent = 22 * 1e15;
-    uint option5perCent  = 21 * 1e15;
+    uint option30perCent = 23 * 1e15;
+    uint option20perCent = 22 * 1e15;
+    uint option10perCent  = 21 * 1e15;
 
-    uint option15gvtPrice = 1000; // TODO
-    uint option10gvtPrice = 1000; // TODO
-    uint option5gvtPrice  = 1000; // TODO
+    uint option30gvtPrice = 1000; // TODO
+    uint option20gvtPrice = 1000; // TODO
+    uint option10gvtPrice  = 1000; // TODO
 
-    string public constant option15name = "Genesis Vision Option Token with 15% bonus";
+    string public constant option30name = "Genesis Vision Option Token with 30% bonus";
+    string public constant option20name = "Genesis Vision Option Token with 20% bonus";
     string public constant option10name = "Genesis Vision Option Token with 10% bonus";
-    string public constant option5name  = "Genesis Vision Option Token with 5% bonus";
 
-    string public constant option15symbol = "GVOT15";
+    string public constant option30symbol = "GVOT30";
+    string public constant option20symbol = "GVOT20";
     string public constant option10symbol = "GVOT10";
-    string public constant option5symbol  = "GVOT5";
 
-    uint constant option15_TOKEN_LIMIT = 575000 * 1e18;
-    uint constant option10_TOKEN_LIMIT = 1650000 * 1e18;
-    uint constant option5_TOKEN_LIMIT  = 3300000 * 1e18;
+    uint constant option30_TOKEN_LIMIT = 575000 * 1e18;
+    uint constant option20_TOKEN_LIMIT = 1650000 * 1e18;
+    uint constant option10_TOKEN_LIMIT  = 3300000 * 1e18;
 
     // Events
     event StartOptionsSelling();
@@ -37,10 +37,9 @@ contract GVOptionProgram {
     address public gvAgent; // payments bot account
     address public team;    // team account
 
-    GVOptionToken public gvOptionToken5;
+    GVOptionToken public gvOptionToken30;
+    GVOptionToken public gvOptionToken20;
     GVOptionToken public gvOptionToken10;
-    GVOptionToken public gvOptionToken15;
-
 
     // Modifiers
     modifier teamOnly { require(msg.sender == team); _; }
@@ -50,9 +49,9 @@ contract GVOptionProgram {
     OptionsSellingState optionsSellingState = OptionsSellingState.Created;
     
     function GVOptionProgram(address _gvAgent, address _team) {
-        gvOptionToken5 = new GVOptionToken(this, option5name, option5symbol, option5_TOKEN_LIMIT);
+        gvOptionToken30 = new GVOptionToken(this, option30name, option30symbol, option30_TOKEN_LIMIT);
+        gvOptionToken20 = new GVOptionToken(this, option20name, option20symbol, option20_TOKEN_LIMIT);
         gvOptionToken10 = new GVOptionToken(this, option10name, option10symbol, option10_TOKEN_LIMIT);
-        gvOptionToken15 = new GVOptionToken(this, option15name, option15symbol, option15_TOKEN_LIMIT);
         gvAgent = _gvAgent;
         team = _team;
     }
@@ -80,21 +79,21 @@ contract GVOptionProgram {
         require(optionsSellingState == OptionsSellingState.Finished);
         require(usdCents > 0);
 
-        (executedTokens, remainingCents) = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken15, 0, option15gvtPrice);
+        (executedTokens, remainingCents) = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken30, 0, option30gvtPrice);
         if (remainingCents <= 0) {
             return (executedTokens, 0);
         }
 
-        uint executed10;
-        (executed10, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken10, 1, option10gvtPrice);
+        uint executed20;
+        (executed20, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken20, 1, option20gvtPrice);
         if (remainingCents <= 0) {
-            return (executedTokens + executed10, 0);
+            return (executedTokens + executed20, 0);
         }
 
-        uint executed5;
-        (executed5, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken5, 2, option5gvtPrice);
+        uint executed10;
+        (executed10, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken10, 2, option10gvtPrice);
         
-        return (executedTokens + executed5, remainingCents);
+        return (executedTokens + executed10, remainingCents); // ??
     }
 
     function buyOptions(address buyer, uint usdCents, string txHash)
@@ -103,17 +102,17 @@ contract GVOptionProgram {
         require(optionsSellingState == OptionsSellingState.Running);
         require(usdCents > 0);
 
-        var remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken15, 0, option15perCent);
+        var remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken30, 0, option30perCent);
         if (remainUsdCents <= 0) {
             return;
         }
 
-        remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken10, 1, option10perCent);
+        remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken20, 1, option20perCent);
         if (remainUsdCents <= 0) {
             return;
         }
 
-        remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken5, 2, option5perCent);
+        remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken10, 2, option10perCent);
         // TODO
     }   
 
