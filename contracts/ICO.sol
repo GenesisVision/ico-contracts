@@ -54,7 +54,7 @@ contract ICO {
 
     function startIcoForOptionsHolders() external teamOnly {
         require(icoState == IcoState.RunningOptionsSelling || icoState == IcoState.Paused);
-        icoState = IcoState.RunningForOptionsHolders;
+        icoState = IcoState.RunningForOptionsHolders;  /* /!\ finish options selling? Else there's no difference between RunningForOptionsHolders and Running - people can still buy options and execute them */
         StartICOForOptionsHolders();
     }
 
@@ -67,7 +67,7 @@ contract ICO {
 
     function pauseIco() external teamOnly {
         require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
-        icoState = IcoState.Paused;
+        icoState = IcoState.Paused;  /* /!\ doesn't pause options selling */
         PauseIco();
     }
 
