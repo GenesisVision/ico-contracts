@@ -95,7 +95,6 @@ contract GVOptionProgram {
         (executed5, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken5, 2, option5gvtPrice);
         
         return (executedTokens + executed5, remainingCents);
-        // TODO
     }
 
     function buyOptions(address buyer, uint usdCents, string txHash)
@@ -122,7 +121,7 @@ contract GVOptionProgram {
         GVOptionToken optionToken, uint8 optionType, uint gvOptionToken)
         private returns (uint, uint) {
 
-        return (0, 0);
+        return (0, usdCents);
         // TODO
     }
 
