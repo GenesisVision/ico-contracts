@@ -58,7 +58,7 @@ contract('ICO', function (accounts) {
                 return ico.startIcoForOptionsHolders();
             })
             .then(() => {
-                return ico.buyTokens(account1, 9500, "test")
+                return ico.buyTokensByOptions(account1, 9500, "test")
             })
             .then(() => {
                 return gvt.balanceOf.call(account1)

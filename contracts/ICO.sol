@@ -89,6 +89,22 @@ contract ICO {
     function buyTokens(address buyer, uint usdCents, string txHash)
         external gvAgentOnly
         returns (uint) {
+
+        require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
+        require(usdCents > 0);
+        uint tokens = usdCents * 1e16;
+        require(tokensSold + tokens <= TOKENS_FOR_SALE);
+        tokensSold += tokens;
+            
+        gvtToken.mint(buyer, tokens);
+        BuyTokens(buyer, tokens, txHash);
+
+        return 0;
+        }
+
+    function buyTokensByOptions(address buyer, uint usdCents, string txHash)
+        external gvAgentOnly
+        returns (uint) {
         require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
         require(usdCents > 0);
 
@@ -105,19 +121,10 @@ contract ICO {
         }
 
         if (icoState == IcoState.Running) {
-            uint tokens = remainingCents * 1e16;
-            require(tokensSold + tokens <= TOKENS_FOR_SALE);
-            tokensSold += tokens;
-            
-            gvtToken.mint(buyer, tokens);
-            BuyTokens(buyer, tokens, txHash);
-
-            return 0;
+            return this.buyTokens(buyer, usdCents, txHash);
         } else {
             return remainingCents;
         }
-
-        return 0;
     }
 
     function buyOptions(address buyer, uint usdCents, string txHash)
