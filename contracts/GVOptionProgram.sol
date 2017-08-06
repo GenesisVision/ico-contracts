@@ -5,7 +5,7 @@ import './GVOptionToken.sol';
 contract GVOptionProgram {
 
     // Constants
-    uint option30perCent = 23 * 1e15;
+    uint option30perCent = 23 * 1e15;  /* /!\ 30% should be 26 ? others too */
     uint option20perCent = 22 * 1e15;
     uint option10perCent  = 21 * 1e15;
 
@@ -23,7 +23,7 @@ contract GVOptionProgram {
 
     uint constant option30_TOKEN_LIMIT = 575000 * 1e18;
     uint constant option20_TOKEN_LIMIT = 1650000 * 1e18;
-    uint constant option10_TOKEN_LIMIT  = 3300000 * 1e18;
+    uint constant option10_TOKEN_LIMIT  = 3300000 * 1e18;  /* /!\ 3300 not evenly divisible by 21 */
 
     // Events
     event StartOptionsSelling();
@@ -81,7 +81,7 @@ contract GVOptionProgram {
         require(usdCents > 0);
 
         (executedTokens, remainingCents) = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken30, 0, option30gvtPrice);
-        if (remainingCents <= 0) {
+        if (remainingCents <= 0) {  /* /!\ uint can't be < 0, use signed int? */
             return (executedTokens, 0);
         }
 
@@ -104,7 +104,7 @@ contract GVOptionProgram {
         require(usdCents > 0);
 
         var remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken30, 0, option30perCent);
-        if (remainUsdCents <= 0) {
+        if (remainUsdCents <= 0) {  /* /!\ uint can't be < 0, use signed int? */
             return;
         }
 
@@ -139,7 +139,7 @@ contract GVOptionProgram {
             }
             else {
                 optionToken.buyOptions(buyer, availableTokens, txHash);
-                BuyOptions(buyer, tokens, txHash, optionType);
+                BuyOptions(buyer, tokens, txHash, optionType);  /* /!\ incorrect log: we sold 'availableTokens', not 'tokens' */
                 return usdCents - availableTokens / optionsPerCent;
             }
         }
