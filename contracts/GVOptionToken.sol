@@ -19,7 +19,7 @@ contract GVOptionToken is StandardToken {
         address _optionProgram,
         string _name,
         string _symbol,
-        uint _TOKENT_LIMIT
+        uint _TOKENT_LIMIT  /* /!\ rename to _TOKEN_LIMIT ? */
     ) {
         optionProgram = _optionProgram;
         name = _name;
@@ -34,10 +34,10 @@ contract GVOptionToken is StandardToken {
 
         balances[buyer] += value;
         totalSupply += value;
-        Transfer(0x0, buyer, value);
+        Transfer(0x0, buyer, value);  /* /!\ Use BuyOptions event */
     }
     
-    function remainingTokensCount() returns(uint) {
+    function remainingTokensCount() returns(uint) {  /* /!\ Use signed int? */
         return TOKEN_LIMIT - totalSupply;
     }
     
