@@ -64,14 +64,16 @@ contract ICO {
     function finishIco(address _fund, address _bounty) external teamOnly {
         require(icoState == IcoState.Running || icoState == IcoState.Paused);
         icoState = IcoState.Finished;
+
+        uint mintedTokens = gvtToken.totalSupply();
+        if(mintedTokens > 0)
+        {
+            uint totalAmount = mintedTokens * 200 / 147;
+            gvtToken.mint(teamAllocator, 3 * totalAmount / 20);
+            gvtToken.mint(_fund, totalAmount / 10);
+            gvtToken.mint(_bounty, 3 * totalAmount / 200);
+        }
         
-        // uint mintedTokens = gvtToken.totalSupply();
-        // uint totalAmount = mintedTokens * 200 / 147;
-
-        // gvtToken.mint(teamAllocator, 3 * totalAmount / 20);
-        // gvtToken.mint(_fund, totalAmount / 10);
-        // gvtToken.mint(_bounty, 3 * totalAmount / 200);
-
         FinishIco();
     }    
 

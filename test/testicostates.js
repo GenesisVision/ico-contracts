@@ -49,7 +49,7 @@ contract('ICO', function (accounts) {
     });
 
     it("should be finished after finish", () => {
-        return ico.finishIco()
+        return ico.finishIco(0, 0)
             .then(() => {
                 return ico.icoState.call();
             })
@@ -57,5 +57,4 @@ contract('ICO', function (accounts) {
                 assert.equal(4, s.valueOf(), "State should be 4");
             })
     });
-
 });
