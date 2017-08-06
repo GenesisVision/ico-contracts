@@ -18,13 +18,23 @@ contract('ICO', function (accounts) {
             })
     });
 
+    it("should be running options program after start selling", () => {
+        return ico.startIcoForOptions()
+            .then(() => {
+                return ico.icoState.call();
+            })
+            .then((s) => {
+                assert.equal(1, s.valueOf(), "State should be 1");
+            })
+    });
+
     it("should be running after start", () => {
         return ico.startIco()
             .then(() => {
                 return ico.icoState.call();
             })
             .then((s) => {
-                assert.equal(1, s.valueOf(), "State should be 1");
+                assert.equal(2, s.valueOf(), "State should be 2");
             })
     });
 
@@ -34,7 +44,7 @@ contract('ICO', function (accounts) {
                 return ico.icoState.call();
             })
             .then((s) => {
-                assert.equal(2, s.valueOf(), "State should be 2");
+                assert.equal(3, s.valueOf(), "State should be 3");
             })
     });
 
@@ -44,7 +54,7 @@ contract('ICO', function (accounts) {
                 return ico.icoState.call();
             })
             .then((s) => {
-                assert.equal(3, s.valueOf(), "State should be 3");
+                assert.equal(4, s.valueOf(), "State should be 4");
             })
     });
 

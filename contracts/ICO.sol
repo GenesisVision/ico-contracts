@@ -33,13 +33,14 @@ contract ICO {
 
     function ICO( address _team, address _gvAgent) {
         gvtToken = new GVTToken(this);
-        optionProgram = new GVOptionProgram(_gvAgent, _team);
         gvAgent = _gvAgent;
         team = _team;
     }
 
-    function StartIcoForOption() external teamOnly {
+    function startIcoForOptions() external teamOnly {
         require(icoState == IcoState.Created || icoState == IcoState.Paused);
+        optionProgram = new GVOptionProgram(this, gvAgent, team);
+        optionProgram.startOptionsSelling();        
         icoState = IcoState.RunningForOptionsHolders;
         RunIco();
     }
@@ -52,7 +53,7 @@ contract ICO {
     }
 
     function pauseIco() external teamOnly {
-        require(icoState == IcoState.Running);
+        require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
         icoState = IcoState.Paused;
         PauseIco();
     }
@@ -61,12 +62,12 @@ contract ICO {
         require(icoState == IcoState.Running || icoState == IcoState.Paused);
         icoState = IcoState.Finished;
         
-        uint mintedTokens = gvtToken.totalSupply();
-        uint totalAmount = mintedTokens * 200 / 147;
+        // uint mintedTokens = gvtToken.totalSupply();
+        // uint totalAmount = mintedTokens * 200 / 147;
 
-        gvtToken.mint(_team, 3 * totalAmount / 20);
-        gvtToken.mint(_fund, totalAmount / 10);
-        gvtToken.mint(_bounty, 3 * totalAmount / 200);
+        // gvtToken.mint(_team, 3 * totalAmount / 20);
+        // gvtToken.mint(_fund, totalAmount / 10);
+        // gvtToken.mint(_bounty, 3 * totalAmount / 200);
 
         FinishIco();
     }    
