@@ -94,7 +94,7 @@ contract GVOptionProgram {
         uint executed10;
         (executed10, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken10, 2, option10gvtPrice);
         
-        return (executedTokens + executed10 + executed20, remainingCents); // ??
+        return (executedTokens + executed20 + executed10, remainingCents); // ??
     }
 
     function buyOptions(address buyer, uint usdCents, string txHash)
@@ -118,11 +118,14 @@ contract GVOptionProgram {
     }   
 
     function executeIfAvailable(address buyer, uint usdCents, string txHash,
-        GVOptionToken optionToken, uint8 optionType, uint gvOptionToken)
-        private returns (uint, uint) {
+        GVOptionToken optionToken, uint8 optionType, uint gvOptionTokenPrice)
+        private returns (uint executedTokens, uint remainingCents) {
+        
+        var optionsAmount = usdCents * gvOptionTokenPrice;
+        executedTokens = optionToken.executeOption(buyer, optionsAmount);
+        remainingCents = usdCents - (executedTokens / gvOptionTokenPrice);
 
-        return (0, usdCents);
-        // TODO
+        return (executedTokens, remainingCents);
     }
 
     function buyIfAvailable(address buyer, uint usdCents, string txHash,
