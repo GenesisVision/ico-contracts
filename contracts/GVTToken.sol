@@ -26,6 +26,4 @@ contract GVTToken is StandardToken {
         totalSupply += value;
         Transfer(0x0, holder, value);
     }
-
-    //ToDo: team tokens freeze
 }

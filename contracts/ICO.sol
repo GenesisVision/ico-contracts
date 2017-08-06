@@ -11,6 +11,8 @@ contract ICO {
     uint public constant TOKENS_FOR_SALE = 6000000 * 1e18; // TODO
 
     // Events
+    event StartOptionsSelling();
+    event StartICOForOptionsHolders();
     event RunIco();
     event PauseIco();
     event FinishIco();
@@ -30,7 +32,7 @@ contract ICO {
 
     uint tokensSold = 0;
 
-    enum IcoState { Created, RunningForOptionsHolders, Running, Paused, Finished }
+    enum IcoState { Created, RunningOptionsSelling, RunningForOptionsHolders, Running, Paused, Finished }
     IcoState public icoState = IcoState.Created;
 
     function ICO( address _team, address _gvAgent) {
@@ -40,12 +42,20 @@ contract ICO {
         teamAllocator = new GVTTeamAllocator(gvtToken);
     }
 
-    function startIcoForOptions() external teamOnly {
+    function startOptionsSelling() external teamOnly {
         require(icoState == IcoState.Created || icoState == IcoState.Paused);
-        optionProgram = new GVOptionProgram(this, gvAgent, team);
+        if(optionProgram == address(0)) { // TODO is it OK?
+            optionProgram = new GVOptionProgram(this, gvAgent, team);
+        }
         optionProgram.startOptionsSelling();        
+        icoState = IcoState.RunningOptionsSelling;
+        StartOptionsSelling();
+    }
+
+    function startIcoForOptionsHolders() external teamOnly {
+        require(icoState == IcoState.RunningOptionsSelling || icoState == IcoState.Paused);
         icoState = IcoState.RunningForOptionsHolders;
-        RunIco();
+        StartICOForOptionsHolders();
     }
 
     function startIco() external teamOnly {
@@ -97,7 +107,7 @@ contract ICO {
         }
 
         if (icoState == IcoState.Running) {
-            uint tokens = remainingCents * 1e15; // TODO check it
+            uint tokens = remainingCents * 1e16; // TODO check it
             require(tokensSold + tokens <= TOKENS_FOR_SALE);
             tokensSold += tokens;
             
