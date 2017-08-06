@@ -89,8 +89,7 @@ contract ICO {
 
     function buyTokens(address buyer, uint usdCents, string txHash)
         external gvAgentOnly
-        returns (uint) // TODO first day only for options holders
-    {
+        returns (uint) {// TODO first day only for options holders
         require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
         require(usdCents > 0);
 
@@ -107,7 +106,7 @@ contract ICO {
         }
 
         if (icoState == IcoState.Running) {
-            uint tokens = remainingCents * 1e16; // TODO check it
+            uint tokens = remainingCents * 1e16;
             require(tokensSold + tokens <= TOKENS_FOR_SALE);
             tokensSold += tokens;
             

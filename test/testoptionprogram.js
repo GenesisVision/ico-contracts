@@ -1,8 +1,6 @@
 var ICO = artifacts.require("./ICO.sol");
 var GVOptionProgram = artifacts.require("./GVOptionProgram.sol");
-var GVOptionToken5 = artifacts.require("./GVOptionToken5.sol");
-var GVOptionToken10 = artifacts.require("./GVOptionToken10.sol");
-var GVOptionToken15 = artifacts.require("./GVOptionToken15.sol");
+var GVOptionToken = artifacts.require("./GVOptionToken.sol");
 
 contract('GVOptionProgram', function (accounts) {
     var account = accounts[0];
@@ -13,46 +11,44 @@ contract('GVOptionProgram', function (accounts) {
 
     var ico;
     var optionProgram; 
-    var gvOptionToken5;
+    var gvOptionToken30;
+    var gvOptionToken20;
     var gvOptionToken10;
-    var gvOptionToken15;
 
     before('setup', (done) => {
         ICO.deployed().then((_ico) => {
             ico = _ico;
+            return ico.startOptionsSelling()
+        })
+        .then(() =>{
             return ico.optionProgram.call();
         })
         .then((_optionProgram) => {
             optionProgram = GVOptionProgram.at(_optionProgram);
-            return optionProgram.startOptionsSelling()
-        })
-        .then(() => {
-            return optionProgram.gvOptionToken5.call();
+            return optionProgram.gvOptionToken30.call();
         })
         .then((op) => {
-            gvOptionToken5 = GVOptionToken5.at(op);
+            gvOptionToken30 = GVOptionToken.at(op);
+        })
+        .then(() => {
+            return optionProgram.gvOptionToken20.call();
+        })
+        .then((op) => {
+            gvOptionToken20 = GVOptionToken.at(op);
         })
         .then(() => {
             return optionProgram.gvOptionToken10.call();
         })
         .then((op) => {
-            gvOptionToken10 = GVOptionToken10.at(op);
-        })
-        .then(() => {
-            return optionProgram.gvOptionToken15.call();
-        })
-        .then((op) => {
-            gvOptionToken15 = GVOptionToken15.at(op);
-        })
-        .then(() => {
+            gvOptionToken10 = GVOptionToken.at(op);
             done();
         });
     });
 
     it("should buy 230 tokens per 10 usd", () => {
-        return optionProgram.buyOptions(account1, 1000, "test")
+        return ico.buyOptions(account1, 1000, "test")
             .then(() => {
-                return gvOptionToken15.balanceOf.call(account1)
+                return gvOptionToken30.balanceOf.call(account1)
             })
             .then((b) => {
                 assert.equal(23 * 1e18, b.valueOf(), "Balance should be 230");

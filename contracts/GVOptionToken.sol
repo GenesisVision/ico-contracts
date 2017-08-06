@@ -15,6 +15,8 @@ contract GVOptionToken is StandardToken {
 
     uint TOKEN_LIMIT;
 
+    modifier optionProgramOnly { require(msg.sender == optionProgram); _; }
+
     function GVOptionToken(
         address _optionProgram,
         string _name,
@@ -27,8 +29,7 @@ contract GVOptionToken is StandardToken {
         TOKEN_LIMIT = _TOKENT_LIMIT;
     }
 
-    function buyOptions(address buyer, uint value, string tx) {
-        require(msg.sender == optionProgram);
+    function buyOptions(address buyer, uint value, string tx) optionProgramOnly {
         require(value > 0);
         require(totalSupply + value <= TOKEN_LIMIT);
 
@@ -41,13 +42,20 @@ contract GVOptionToken is StandardToken {
         return TOKEN_LIMIT - totalSupply;
     }
     
-    // TODO ICO program???
-    // Only OptionProgram can execute the option after charging GVT tokens
-    function executeOption(address addr, uint optionsCount) {
-        require(msg.sender == optionProgram);
-        require(balances[addr] >= optionsCount);
+    function executeOption(address addr, uint optionsCount) 
+        optionProgramOnly
+        returns (uint) {
+        if (balances[addr] < optionsCount) {
+            optionsCount = balances[addr];
+        }
+        if (optionsCount == 0) {
+            return 0;
+        }
+
         balances[addr] -= optionsCount;
         totalSupply -= optionsCount;
         ExecuteOptions(addr, optionsCount);
+
+        return optionsCount;
     }
 }
