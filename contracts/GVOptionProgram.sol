@@ -57,7 +57,7 @@ contract GVOptionProgram {
         ico = _ico;
     }
 
-    function startOptionsSelling() icoOnly { // TODO fix external
+    function startOptionsSelling() icoOnly {
         require(optionsSellingState == OptionsSellingState.Created || optionsSellingState == OptionsSellingState.Paused);
         optionsSellingState = OptionsSellingState.Running;
         StartOptionsSelling();
@@ -94,12 +94,11 @@ contract GVOptionProgram {
         uint executed10;
         (executed10, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken10, 2, option10gvtPrice);
         
-        return (executedTokens + executed20 + executed10, remainingCents); // ??
+        return (executedTokens + executed20 + executed10, remainingCents);
     }
 
     function buyOptions(address buyer, uint usdCents, string txHash)
-        icoOnly
-    {
+        icoOnly {
         require(optionsSellingState == OptionsSellingState.Running);
         require(usdCents > 0);
 

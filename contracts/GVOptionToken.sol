@@ -44,14 +44,11 @@ contract GVOptionToken is StandardToken {
     
     function executeOption(address addr, uint optionsCount) 
         optionProgramOnly
-        returns (uint) 
-    {
-        if (balances[addr] < optionsCount)
-        {
+        returns (uint) {
+        if (balances[addr] < optionsCount) {
             optionsCount = balances[addr];
         }
-        if (optionsCount == 0)
-        {
+        if (optionsCount == 0) {
             return 0;
         }
 
