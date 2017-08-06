@@ -7,7 +7,6 @@ import './GVTTeamAllocator.sol';
 contract ICO {
 
     // Constants
-    uint public constant TOKEN_PRICE = 10; // GVT per 100 USD
     uint public constant TOKENS_FOR_SALE = 6000000 * 1e18; // TODO
 
     // Events
@@ -54,13 +53,13 @@ contract ICO {
 
     function startIcoForOptionsHolders() external teamOnly {
         require(icoState == IcoState.RunningOptionsSelling || icoState == IcoState.Paused);
-        icoState = IcoState.RunningForOptionsHolders;  /* /!\ finish options selling? Else there's no difference between RunningForOptionsHolders and Running - people can still buy options and execute them */
+        optionProgram.finishOptionsSelling();
+        icoState = IcoState.RunningForOptionsHolders;
         StartICOForOptionsHolders();
     }
 
     function startIco() external teamOnly {
         require(icoState == IcoState.RunningForOptionsHolders || icoState == IcoState.Paused);
-        optionProgram.finishOptionsSelling();
         icoState = IcoState.Running;
         RunIco();
     }
@@ -89,7 +88,7 @@ contract ICO {
 
     function buyTokens(address buyer, uint usdCents, string txHash)
         external gvAgentOnly
-        returns (uint) {// TODO first day only for options holders
+        returns (uint) {
         require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
         require(usdCents > 0);
 
@@ -117,11 +116,14 @@ contract ICO {
         } else {
             return remainingCents;
         }
+
+        return 0;
     }
 
     function buyOptions(address buyer, uint usdCents, string txHash)
         external gvAgentOnly
     {
+        require(icoState == IcoState.RunningOptionsSelling);
         optionProgram.buyOptions(buyer, usdCents, txHash);
     }
 }

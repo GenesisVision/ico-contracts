@@ -5,13 +5,9 @@ import './GVOptionToken.sol';
 contract GVOptionProgram {
 
     // Constants
-    uint option30perCent = 23 * 1e15;  /* /!\ 30% should be 26 ? others too */
-    uint option20perCent = 22 * 1e15;
-    uint option10perCent  = 21 * 1e15;
-
-    uint option30gvtPrice = 1000; // TODO  /* /!\ should be USD-cent price to execute one option */
-    uint option20gvtPrice = 1000; // TODO
-    uint option10gvtPrice  = 1000; // TODO
+    uint option30perCent = 26 * 1e16;
+    uint option20perCent = 24 * 1e16;
+    uint option10perCent  = 22 * 1e16;
 
     string public constant option30name = "30% GVOT";
     string public constant option20name = "20% GVOT";
@@ -80,19 +76,19 @@ contract GVOptionProgram {
         require(optionsSellingState == OptionsSellingState.Finished);
         require(usdCents > 0);
 
-        (executedTokens, remainingCents) = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken30, 0, option30gvtPrice);
-        if (remainingCents <= 0) {  /* /!\ uint can't be < 0, use signed int? */
+        (executedTokens, remainingCents) = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken30, 0, option30perCent);
+        if (remainingCents == 0) {
             return (executedTokens, 0);
         }
 
         uint executed20;
-        (executed20, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken20, 1, option20gvtPrice);
-        if (remainingCents <= 0) {
+        (executed20, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken20, 1, option20perCent);
+        if (remainingCents == 0) {
             return (executedTokens + executed20, 0);
         }
 
         uint executed10;
-        (executed10, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken10, 2, option10gvtPrice);
+        (executed10, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken10, 2, option10perCent);
         
         return (executedTokens + executed20 + executed10, remainingCents);
     }
@@ -103,27 +99,26 @@ contract GVOptionProgram {
         require(usdCents > 0);
 
         var remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken30, 0, option30perCent);
-        if (remainUsdCents <= 0) {  /* /!\ uint can't be < 0, use signed int? */
+        if (remainUsdCents == 0) {
             return;
         }
 
         remainUsdCents = buyIfAvailable(buyer, remainUsdCents, txHash, gvOptionToken20, 1, option20perCent);
-        if (remainUsdCents <= 0) {
+        if (remainUsdCents == 0) {
             return;
         }
 
         remainUsdCents = buyIfAvailable(buyer, remainUsdCents, txHash, gvOptionToken10, 2, option10perCent);
-        // TODO
     }   
 
     function executeIfAvailable(address buyer, uint usdCents, string txHash,
-        GVOptionToken optionToken, uint8 optionType, uint gvOptionTokenPrice)
+        GVOptionToken optionToken, uint8 optionType, uint optionPerCent)
         private returns (uint executedTokens, uint remainingCents) {
         
-        var optionsAmount = usdCents * gvOptionTokenPrice;
+        var optionsAmount = usdCents * optionPerCent;
         executedTokens = optionToken.executeOption(buyer, optionsAmount);
-        remainingCents = usdCents - (executedTokens / gvOptionTokenPrice);
-
+        remainingCents = usdCents - (executedTokens / optionPerCent);
+        ExecuteOptions(buyer, executedTokens, txHash, optionType);
         return (executedTokens, remainingCents);
     }
 
@@ -141,7 +136,7 @@ contract GVOptionProgram {
             }
             else {
                 optionToken.buyOptions(buyer, availableTokens, txHash);
-                BuyOptions(buyer, tokens, txHash, optionType);  /* /!\ incorrect log: we sold 'availableTokens', not 'tokens' */
+                BuyOptions(buyer, availableTokens, txHash, optionType);
                 return usdCents - availableTokens / optionsPerCent;
             }
         }
