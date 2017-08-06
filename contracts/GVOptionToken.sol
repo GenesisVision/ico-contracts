@@ -38,7 +38,7 @@ contract GVOptionToken is StandardToken {
         Transfer(0x0, buyer, value);  /* /!\ Use BuyOptions event */
     }
     
-    function remainingTokensCount() returns(uint) {  /* /!\ Use signed int? */
+    function remainingTokensCount() returns(uint) {
         return TOKEN_LIMIT - totalSupply;
     }
     
