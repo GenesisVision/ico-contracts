@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "Genesis vision option smart contract",
   "dependencies": {
-    "zeppelin-solidity": "^1.1.0"
+    "zeppelin-solidity": "^1.2.0"
   }
 }

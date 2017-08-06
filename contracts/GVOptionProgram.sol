@@ -121,7 +121,7 @@ contract GVOptionProgram {
         GVOptionToken optionToken, uint8 optionType, uint gvOptionToken)
         private returns (uint, uint) {
 
-        return (0, 0);
+        return (0, usdCents);
         // TODO
     }
 
