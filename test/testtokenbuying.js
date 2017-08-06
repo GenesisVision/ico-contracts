@@ -18,6 +18,12 @@ contract('ICO', function (accounts) {
         })
         .then((_gvt) => {
             gvt = GVT.at(_gvt);
+            return ico.startOptionsSelling()
+        })
+        .then(() => {
+            return ico.startIcoForOptionsHolders()
+        })
+        .then(() => {
             return ico.startIco()
         })
         .then(() => {
@@ -25,32 +31,33 @@ contract('ICO', function (accounts) {
         });
     });
 
-    it("should buy 1 token per 10 usd", () => {
+    it("should buy 10 token per 10 usd", () => {
         return ico.buyTokens(account1, 1000, "test")
             .then(() => {
                 return gvt.balanceOf.call(account1)
             })
             .then((b) => {
-                assert.equal(1 * 1e18, b.valueOf(), "Balance should be 1");
+                assert.equal(10 * 1e18, b.valueOf(), "Balance should be 10");
             });
     });
 
-    it("should buy 5 token per 50 usd", () => {
+    it("should buy 50 token per 50 usd", () => {
         return ico.buyTokens(account2, 5000, "test")
             .then(() => {
                 return gvt.balanceOf.call(account2)
             })
             .then((b) => {
-                assert.equal(5 * 1e18, b.valueOf(), "Balance should be 5");
+                assert.equal(50 * 1e18, b.valueOf(), "Balance should be 50");
             });
     });
-    it("should buy 101 token per 1010 usd", () => {
+
+    it("should buy 1010 token per 1010 usd", () => {
         return ico.buyTokens(account3, 101000, "test")
             .then(() => {
                 return gvt.balanceOf.call(account3)
             })
             .then((b) => {
-                assert.equal(101 * 1e18, b.valueOf(), "Balance should be 101");
+                assert.equal(1010 * 1e18, b.valueOf(), "Balance should be 1010");
             });
     });
 });
