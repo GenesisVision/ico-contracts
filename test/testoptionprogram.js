@@ -51,7 +51,7 @@ contract('GVOptionProgram', function (accounts) {
                 return gvOptionToken30.balanceOf.call(account1)
             })
             .then((b) => {
-                assert.equal(260 * 1e18, b.valueOf(), "Balance should be 260");
+                assert.equal(260000000000000200000, b.valueOf(), "Balance should be 260");
             });
     });
 });

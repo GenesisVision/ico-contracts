@@ -5,9 +5,12 @@ import './GVOptionToken.sol';
 contract GVOptionProgram {
 
     // Constants
-    uint option30perCent = 26 * 1e16;
-    uint option20perCent = 24 * 1e16;
-    uint option10perCent  = 22 * 1e16;
+    uint option30perCent = 260000000000000200;
+    uint option20perCent = 240000000000001500;
+    uint option10perCent = 220000000000000900;
+    uint token30perCent  = 13684210526315800;
+    uint token20perCent  = 12631578947368500;
+    uint token10perCent  = 11578947368421100;
 
     string public constant option30name = "30% GVOT";
     string public constant option20name = "20% GVOT";
@@ -18,7 +21,7 @@ contract GVOptionProgram {
     string public constant option10symbol = "GVOT10";
 
     uint constant option30_TOKEN_LIMIT = 26 * 1e5 * 1e18;
-    uint constant option20_TOKEN_LIMIT = 36 * 1e5 * 1e18;;
+    uint constant option20_TOKEN_LIMIT = 36 * 1e5 * 1e18;
     uint constant option10_TOKEN_LIMIT  = 55 * 1e5 * 1e18;
 
     // Events
@@ -76,19 +79,19 @@ contract GVOptionProgram {
         require(optionsSellingState == OptionsSellingState.Finished);
         require(usdCents > 0);
 
-        (executedTokens, remainingCents) = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken30, 0, option30perCent);
+        (executedTokens, remainingCents) = executeIfAvailable(buyer, usdCents, txHash, gvOptionToken30, 0, token30perCent);
         if (remainingCents == 0) {
             return (executedTokens, 0);
         }
 
         uint executed20;
-        (executed20, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken20, 1, option20perCent);
+        (executed20, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken20, 1, token20perCent);
         if (remainingCents == 0) {
             return (executedTokens + executed20, 0);
         }
 
         uint executed10;
-        (executed10, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken10, 2, option10perCent);
+        (executed10, remainingCents) = executeIfAvailable(buyer, remainingCents, txHash, gvOptionToken10, 2, token10perCent);
         
         return (executedTokens + executed20 + executed10, remainingCents);
     }
