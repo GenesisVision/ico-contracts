@@ -121,7 +121,7 @@ contract ICO {
         }
 
         if (icoState == IcoState.Running) {
-            return this.buyTokens(buyer, usdCents, txHash);
+            return this.buyTokens(buyer, remainingCents, txHash);
         } else {
             return remainingCents;
         }
