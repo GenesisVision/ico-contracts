@@ -18,7 +18,7 @@ contract GVOptionProgram {
     string public constant option10symbol = "GVOT10";
 
     uint constant option30_TOKEN_LIMIT = 26 * 1e5 * 1e18;
-    uint constant option20_TOKEN_LIMIT = 36 * 1e5 * 1e18;;
+    uint constant option20_TOKEN_LIMIT = 36 * 1e5 * 1e18;
     uint constant option10_TOKEN_LIMIT  = 55 * 1e5 * 1e18;
 
     // Events
@@ -42,7 +42,7 @@ contract GVOptionProgram {
     modifier icoOnly { require(msg.sender == ico); _; }
 
     enum OptionsSellingState { Created, Running, Paused, Finished }
-    OptionsSellingState optionsSellingState = OptionsSellingState.Created;
+    OptionsSellingState public optionsSellingState = OptionsSellingState.Created;
     
     function GVOptionProgram(address _ico, address _gvAgent, address _team) {
         gvOptionToken30 = new GVOptionToken(this, option30name, option30symbol, option30_TOKEN_LIMIT);
