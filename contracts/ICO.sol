@@ -66,7 +66,7 @@ contract ICO {
 
     function pauseIco() external teamOnly {
         require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
-        icoState = IcoState.Paused;  /* /!\ doesn't pause options selling */
+        icoState = IcoState.Paused;
         PauseIco();
     }
 
@@ -90,7 +90,7 @@ contract ICO {
         external gvAgentOnly
         returns (uint) {
 
-        require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
+        require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);  /* /!\ everyone can buy tokens while RunningForOptionsHolders */
         require(usdCents > 0);
         uint tokens = usdCents * 1e16;
         require(tokensSold + tokens <= TOKENS_FOR_SALE);

@@ -17,9 +17,9 @@ contract GVOptionProgram {
     string public constant option20symbol = "GVOT20";
     string public constant option10symbol = "GVOT10";
 
-    uint constant option30_TOKEN_LIMIT = 575000 * 1e18;
+    uint constant option30_TOKEN_LIMIT = 575000 * 1e18;  /* /!\ 575 not evenly divisible by 26 */
     uint constant option20_TOKEN_LIMIT = 1650000 * 1e18;
-    uint constant option10_TOKEN_LIMIT  = 3300000 * 1e18;  /* /!\ 3300 not evenly divisible by 21 */
+    uint constant option10_TOKEN_LIMIT  = 3300000 * 1e18;
 
     // Events
     event StartOptionsSelling();
@@ -115,7 +115,7 @@ contract GVOptionProgram {
         GVOptionToken optionToken, uint8 optionType, uint optionPerCent)
         private returns (uint executedTokens, uint remainingCents) {
         
-        var optionsAmount = usdCents * optionPerCent;
+        var optionsAmount = usdCents * optionPerCent;  /* /!\ 'optionsAmount' should be = usdCents / (95% of GVT price in cents): 'optionPerCent' is related to option buy, not execution. Same with "/ optionPerCent" below */
         executedTokens = optionToken.executeOption(buyer, optionsAmount);
         remainingCents = usdCents - (executedTokens / optionPerCent);
         ExecuteOptions(buyer, executedTokens, txHash, optionType);
