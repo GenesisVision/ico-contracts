@@ -17,9 +17,9 @@ contract GVOptionProgram {
     string public constant option20symbol = "GVOT20";
     string public constant option10symbol = "GVOT10";
 
-    uint constant option30_TOKEN_LIMIT = 575000 * 1e18;
-    uint constant option20_TOKEN_LIMIT = 1650000 * 1e18;
-    uint constant option10_TOKEN_LIMIT  = 3300000 * 1e18;
+    uint constant option30_TOKEN_LIMIT = 26 * 1e5 * 1e18;
+    uint constant option20_TOKEN_LIMIT = 36 * 1e5 * 1e18;;
+    uint constant option10_TOKEN_LIMIT  = 55 * 1e5 * 1e18;
 
     // Events
     event StartOptionsSelling();

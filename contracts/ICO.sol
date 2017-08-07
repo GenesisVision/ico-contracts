@@ -7,7 +7,7 @@ import './GVTTeamAllocator.sol';
 contract ICO {
 
     // Constants
-    uint public constant TOKENS_FOR_SALE = 6000000 * 1e18; // TODO
+    uint public constant TOKENS_FOR_SALE = 50 * 1e6 * 1e18;
 
     // Events
     event StartOptionsSelling();
