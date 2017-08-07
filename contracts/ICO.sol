@@ -87,20 +87,10 @@ contract ICO {
     }    
 
     function buyTokens(address buyer, uint usdCents, string txHash)
-        external gvAgentOnly
-        returns (uint) {
-
-        require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
-        require(usdCents > 0);
-        uint tokens = usdCents * 1e16;
-        require(tokensSold + tokens <= TOKENS_FOR_SALE);
-        tokensSold += tokens;
-            
-        gvtToken.mint(buyer, tokens);
-        BuyTokens(buyer, tokens, txHash);
-
-        return 0;
-        }
+    external gvAgentOnly
+    returns (uint) {
+        return buyTokensInternal(buyer, usdCents, txHash);
+    }
 
     function buyTokensByOptions(address buyer, uint usdCents, string txHash)
         external gvAgentOnly
@@ -121,7 +111,7 @@ contract ICO {
         }
 
         if (icoState == IcoState.Running) {
-            return this.buyTokens(buyer, remainingCents, txHash);
+            return buyTokensInternal(buyer, remainingCents, txHash);
         } else {
             return remainingCents;
         }
@@ -132,5 +122,20 @@ contract ICO {
     {
         require(icoState == IcoState.RunningOptionsSelling);
         optionProgram.buyOptions(buyer, usdCents, txHash);
+    }
+
+    function buyTokensInternal(address buyer, uint usdCents, string txHash)
+    internal
+    returns (uint) {
+        require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
+        require(usdCents > 0);
+        uint tokens = usdCents * 1e16;
+        require(tokensSold + tokens <= TOKENS_FOR_SALE);
+        tokensSold += tokens;
+            
+        gvtToken.mint(buyer, tokens);
+        BuyTokens(buyer, tokens, txHash);
+
+        return 0;
     }
 }
