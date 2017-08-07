@@ -65,7 +65,7 @@ contract ICO {
     }
 
     function pauseIco() external teamOnly {
-        require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
+        require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders || icoState == IcoState.RunningOptionsSelling);
         icoState = IcoState.Paused;
         PauseIco();
     }
