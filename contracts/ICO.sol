@@ -77,10 +77,10 @@ contract ICO {
         uint mintedTokens = gvtToken.totalSupply();
         if(mintedTokens > 0)
         {
-            uint totalAmount = mintedTokens * 200 / 147;
-            gvtToken.mint(teamAllocator, 3 * totalAmount / 20);
-            gvtToken.mint(_fund, totalAmount / 10);
-            gvtToken.mint(_bounty, 3 * totalAmount / 200);
+            uint totalAmount = mintedTokens * 243 / 200;        // 121.5% tokens
+            gvtToken.mint(teamAllocator, 9 * totalAmount / 80); // 11.25%
+            gvtToken.mint(_fund, totalAmount / 20);             // 5%
+            gvtToken.mint(_bounty, 21 * totalAmount / 400);     // 5.25%
         }
         
         FinishIco();
