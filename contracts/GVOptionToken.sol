@@ -4,9 +4,6 @@ import 'zeppelin-solidity/contracts/token/StandardToken.sol';
 
 contract GVOptionToken is StandardToken {
     
-    event ExecuteOptions(address addr, uint optionsCount);
-    event BuyOptions(address buyer, uint amount, string tx);
-
     address public optionProgram;
 
     string public name;
@@ -36,7 +33,6 @@ contract GVOptionToken is StandardToken {
         balances[buyer] += value;
         totalSupply += value;
         Transfer(0x0, buyer, value);
-        BuyOptions(buyer, value, tx);
     }
     
     function remainingTokensCount() returns(uint) {
@@ -55,7 +51,6 @@ contract GVOptionToken is StandardToken {
 
         balances[addr] -= optionsCount;
         totalSupply -= optionsCount;
-        ExecuteOptions(addr, optionsCount);
 
         return optionsCount;
     }
