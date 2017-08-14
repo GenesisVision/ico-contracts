@@ -7,7 +7,7 @@ import './GVTTeamAllocator.sol';
 contract ICO {
 
     // Constants
-    uint public constant TOKENS_FOR_SALE = 50 * 1e6 * 1e18;
+    uint public constant TOKENS_FOR_SALE = 30 * 1e6 * 1e18;
 
     // Events
     event StartOptionsSelling();
@@ -77,10 +77,10 @@ contract ICO {
         uint mintedTokens = gvtToken.totalSupply();
         if(mintedTokens > 0)
         {
-            uint totalAmount = mintedTokens * 243 / 200;        // 121.5% tokens
-            gvtToken.mint(teamAllocator, 9 * totalAmount / 80); // 11.25%
-            gvtToken.mint(_fund, totalAmount / 20);             // 5%
-            gvtToken.mint(_bounty, 21 * totalAmount / 400);     // 5.25%
+            uint totalAmount = mintedTokens * 4 / 3;              // 125% tokens
+            gvtToken.mint(teamAllocator, 11 * totalAmount / 100); // 11%
+            gvtToken.mint(_fund, totalAmount / 20);               // 5%
+            gvtToken.mint(_bounty, 9 * totalAmount / 100);        // 9%
         }
         
         FinishIco();

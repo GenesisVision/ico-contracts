@@ -22,7 +22,7 @@ contract GVOptionProgram {
 
     uint constant option30_TOKEN_LIMIT = 26 * 1e5 * 1e18;
     uint constant option20_TOKEN_LIMIT = 36 * 1e5 * 1e18;
-    uint constant option10_TOKEN_LIMIT  = 55 * 1e5 * 1e18;
+    uint constant option10_TOKEN_LIMIT = 55 * 1e5 * 1e18;
 
     // Events
     event StartOptionsSelling();

@@ -9,7 +9,7 @@ contract GVTToken is StandardToken {
     string public constant symbol = "GVT";
     uint   public constant decimals = 18;
 
-    uint constant TOKEN_LIMIT = 6000000 * 1e18; // TODO
+    uint constant TOKEN_LIMIT = 4 * 1e6 * 1e18; // TODO
     
     address public ico;
 
