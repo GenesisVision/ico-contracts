@@ -37,32 +37,32 @@ contract('ICO', function (accounts) {
             return ico.startIco()
         })
         .then(() => {
-            return ico.buyTokens(account1, 100000, "test")
+            return ico.buyTokens(account1, 90000, "test")
         })
         .then(() => {
             done();
         });
     });
 
-    it("distribute reserved tokens with 100000 GVT total", () => {
+    it("distribute reserved tokens with 90000 GVT total", () => {
         return ico.finishIco(account2, account3)
             .then(() => {
                 return gvt.balanceOf.call(account2)
             })
             .then((b) => {
-                assert.equal(6075 * 1e16, b.valueOf(), "Balance should be 60.75");
+                assert.equal(60 * 1e18, b.valueOf(), "Balance should be 60");
             })
             .then(() => {
                 return gvt.balanceOf.call(account3)
             })
             .then((b) => {
-                assert.equal(637875 * 1e14, b.valueOf(), "Balance should be 63.7875");
+                assert.equal(108 * 1e18, b.valueOf(), "Balance should be 108");
             })
             .then(() => {
                 return gvt.balanceOf.call(teamAllocator.address)
             })
             .then((b) => {
-                assert.equal(1366875 * 1e14, b.valueOf(), "Balance should be 136.6875");
+                assert.equal(132 * 1e18, b.valueOf(), "Balance should be 132");
             });
     });
 });
