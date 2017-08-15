@@ -74,6 +74,12 @@ contract GVOptionProgram {
         FinishOptionsSelling();
     }  
 
+    function getBalance() external 
+        returns (uint, uint, uint) {
+        require(msg.sender == team);
+        return (gvOptionToken30.remainingTokensCount(), gvOptionToken20.remainingTokensCount(), gvOptionToken10.remainingTokensCount());
+    }
+
     function executeOptions(address buyer, uint usdCents, string txHash) icoOnly
         returns (uint executedTokens, uint remainingCents) {
         require(optionsSellingState == OptionsSellingState.Finished);

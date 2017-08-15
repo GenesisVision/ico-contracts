@@ -19,7 +19,10 @@ contract('ICO', function (accounts) {
     });
 
     it("should be running options selling", () => {
-        return ico.startOptionsSelling()
+        return ico.initOptionProgram()
+            .then(() => {
+                ico.startOptionsSelling();
+            })
             .then(() => {
                 return ico.icoState.call();
             })

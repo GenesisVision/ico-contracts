@@ -27,6 +27,9 @@ contract('ICO', function (accounts) {
         .then((_teamAllocator) => {
             teamAllocator = ALLOCATOR.at(_teamAllocator);
         })
+        .then(() => {
+            return ico.initOptionProgram()
+        })
         .then(() => {            
             return ico.startOptionsSelling()
         })

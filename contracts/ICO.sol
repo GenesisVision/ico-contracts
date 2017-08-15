@@ -41,11 +41,15 @@ contract ICO {
         teamAllocator = new GVTTeamAllocator(gvtToken);
     }
 
-    function startOptionsSelling() external teamOnly {
-        require(icoState == IcoState.Created || icoState == IcoState.Paused);
+    function initOptionProgram() external teamOnly {
         if(optionProgram == address(0)) { // TODO is it OK?
             optionProgram = new GVOptionProgram(this, gvAgent, team);
         }
+    }
+
+    function startOptionsSelling() external teamOnly {
+        require(icoState == IcoState.Created || icoState == IcoState.Paused);
+        require(optionProgram != address(0));
         optionProgram.startOptionsSelling();        
         icoState = IcoState.RunningOptionsSelling;
         StartOptionsSelling();

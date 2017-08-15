@@ -18,6 +18,9 @@ contract('ICO', function (accounts) {
         })
         .then((_gvt) => {
             gvt = GVT.at(_gvt);
+            return ico.initOptionProgram()
+        })
+        .then(() => {            
             return ico.startOptionsSelling()
         })
         .then(() => {
