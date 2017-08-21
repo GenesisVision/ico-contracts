@@ -34,8 +34,8 @@ contract ICO {
     enum IcoState { Created, RunningOptionsSelling, RunningForOptionsHolders, Running, Paused, Finished }
     IcoState public icoState = IcoState.Created;
 
-    function ICO( address _team, address _gvAgent) {
-        gvtToken = new GVTToken(this);
+    function ICO( address _team, address _gvAgent, address _migrationMaster) {
+        gvtToken = new GVTToken(this, _migrationMaster);
         gvAgent = _gvAgent;
         team = _team;
         teamAllocator = new GVTTeamAllocator(gvtToken);

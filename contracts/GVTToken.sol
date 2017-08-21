@@ -2,6 +2,11 @@ pragma solidity ^0.4.11;
 
 import 'zeppelin-solidity/contracts/token/StandardToken.sol';
 
+// Migration Agent interface
+contract MigrationAgent {
+    function migrateFrom(address _from, uint256 _value);
+}
+
 contract GVTToken is StandardToken {
     
     // Constants
@@ -12,9 +17,16 @@ contract GVTToken is StandardToken {
     uint constant TOKEN_LIMIT = 4 * 1e6 * 1e18; // TODO
     
     address public ico;
+    address public migrationMaster;
 
-    function GVTToken(address _ico) {
+    address public migrationAgent;
+    uint256 public totalMigrated;
+
+    event Migrate(address indexed _from, address indexed _to, uint256 _value);
+
+    function GVTToken(address _ico, address _migrationMaster) {
         ico = _ico;
+        migrationMaster = _migrationMaster;
     }
 
     function mint(address holder, uint value) {
@@ -25,5 +37,31 @@ contract GVTToken is StandardToken {
         balances[holder] += value;
         totalSupply += value;
         Transfer(0x0, holder, value);
+    }
+
+    //Token migration
+
+    function migrate(uint256 value) external {
+        require(migrationAgent != 0);
+        require(value > 0);
+        require(value <= balances[msg.sender]);
+
+        balances[msg.sender] -= value;
+        totalSupply -= value;
+        totalMigrated += value;
+        MigrationAgent(migrationAgent).migrateFrom(msg.sender, value);
+        Migrate(msg.sender, migrationAgent, value);
+    }
+
+    function setMigrationAgent(address _agent) external {
+        require(migrationAgent == 0);
+        require(msg.sender == migrationMaster);
+        migrationAgent = _agent;
+    }
+
+    function setMigrationMaster(address _master) external {
+        require(msg.sender == migrationMaster);
+        require(_master != 0);
+        migrationMaster = _master;
     }
 }
