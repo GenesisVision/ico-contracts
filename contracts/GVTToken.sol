@@ -13,7 +13,7 @@ contract GVTToken is StandardToken {
     string public constant name = "Genesis Vision Token";
     string public constant symbol = "GVT";
     uint   public constant decimals = 18;
-    uint constant TOKEN_LIMIT = 4 * 1e6 * 1e18; 
+    uint constant TOKEN_LIMIT = 4 * 1e7 * 1e18; 
     
     address public ico;
 
