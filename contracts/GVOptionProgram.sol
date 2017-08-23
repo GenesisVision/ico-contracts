@@ -5,12 +5,12 @@ import './GVOptionToken.sol';
 contract GVOptionProgram {
 
     // Constants
-    uint option30perCent = 260000000000000200;
-    uint option20perCent = 240000000000001500;
-    uint option10perCent = 220000000000000900;
-    uint token30perCent  = 13684210526315800;
-    uint token20perCent  = 12631578947368500;
-    uint token10perCent  = 11578947368421100;
+    uint constant option30perCent = 260000000000000200; // GVOT30 tokens per cent during option purchase 
+    uint constant option20perCent = 240000000000001500; // GVOT20 tokens per cent during option purchase
+    uint constant option10perCent = 220000000000000900; // GVOT10 tokens per cent during option purchase
+    uint constant token30perCent  = 13684210526315800;  // GVT tokens per cent during execution of GVOT30
+    uint constant token20perCent  = 12631578947368500;  // GVT tokens per cent during execution of GVOT20
+    uint constant token10perCent  = 11578947368421100;  // GVT tokens per cent during execution of GVOT10
 
     string public constant option30name = "30% GVOT";
     string public constant option20name = "20% GVOT";
@@ -47,6 +47,7 @@ contract GVOptionProgram {
     enum OptionsSellingState { Created, Running, Paused, Finished }
     OptionsSellingState public optionsSellingState = OptionsSellingState.Created;
     
+    // Constructor
     function GVOptionProgram(address _ico, address _gvAgent, address _team) {
         gvOptionToken30 = new GVOptionToken(this, option30name, option30symbol, option30_TOKEN_LIMIT);
         gvOptionToken20 = new GVOptionToken(this, option20name, option20symbol, option20_TOKEN_LIMIT);
@@ -56,6 +57,8 @@ contract GVOptionProgram {
         ico = _ico;
     }
 
+    // Option Program state management: Start, Pause, Finish
+    
     function startOptionsSelling() icoOnly {
         require(optionsSellingState == OptionsSellingState.Created || optionsSellingState == OptionsSellingState.Paused);
         optionsSellingState = OptionsSellingState.Running;
@@ -74,12 +77,14 @@ contract GVOptionProgram {
         FinishOptionsSelling();
     }  
 
+    //Get ramaining tokens for all types of option tokens
     function getBalance() external 
         returns (uint, uint, uint) {
         require(msg.sender == team);
         return (gvOptionToken30.remainingTokensCount(), gvOptionToken20.remainingTokensCount(), gvOptionToken10.remainingTokensCount());
     }
 
+    // Execute options during the ICO token purchase. Proirity: GVOT30 -> GVOT20 -> GVOT10
     function executeOptions(address buyer, uint usdCents, string txHash) icoOnly
         returns (uint executedTokens, uint remainingCents) {
         require(optionsSellingState == OptionsSellingState.Finished);
@@ -102,6 +107,7 @@ contract GVOptionProgram {
         return (executedTokens + executed20 + executed10, remainingCents);
     }
 
+    // Buy option tokens. Proirity: GVOT30 -> GVOT20 -> GVOT10
     function buyOptions(address buyer, uint usdCents, string txHash)
         icoOnly {
         require(optionsSellingState == OptionsSellingState.Running);
@@ -120,6 +126,8 @@ contract GVOptionProgram {
         remainUsdCents = buyIfAvailable(buyer, remainUsdCents, txHash, gvOptionToken10, 2, option10perCent);
     }   
 
+    // Private functions
+    
     function executeIfAvailable(address buyer, uint usdCents, string txHash,
         GVOptionToken optionToken, uint8 optionType, uint optionPerCent)
         private returns (uint executedTokens, uint remainingCents) {

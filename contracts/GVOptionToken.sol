@@ -12,20 +12,24 @@ contract GVOptionToken is StandardToken {
 
     uint TOKEN_LIMIT;
 
+    // Modifiers
     modifier optionProgramOnly { require(msg.sender == optionProgram); _; }
 
+    // Constructor
     function GVOptionToken(
         address _optionProgram,
         string _name,
         string _symbol,
         uint _TOKEN_LIMIT
     ) {
+        require(_optionProgram != 0);        
         optionProgram = _optionProgram;
         name = _name;
         symbol = _symbol;
         TOKEN_LIMIT = _TOKEN_LIMIT;
     }
 
+    // Create tokens
     function buyOptions(address buyer, uint value, string tx) optionProgramOnly {
         require(value > 0);
         require(totalSupply + value <= TOKEN_LIMIT);
@@ -39,6 +43,7 @@ contract GVOptionToken is StandardToken {
         return TOKEN_LIMIT - totalSupply;
     }
     
+    // Burn option tokens after execution during ICO
     function executeOption(address addr, uint optionsCount) 
         optionProgramOnly
         returns (uint) {
