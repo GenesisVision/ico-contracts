@@ -93,6 +93,7 @@ contract ICO {
             gvtToken.mint(teamAllocator, 11 * totalAmount / 100); // 11% for team to the time-locked wallet
             gvtToken.mint(_fund, totalAmount / 20);               // 5% for Genesis Vision fund
             gvtToken.mint(_bounty, 9 * totalAmount / 100);        // 9% for Advisers + Bounty
+            gvtToken.unfreeze();
         }
         
         FinishIco();

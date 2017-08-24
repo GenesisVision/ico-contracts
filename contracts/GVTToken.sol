@@ -17,6 +17,9 @@ contract GVTToken is StandardToken {
     
     address public ico;
 
+    // GVT transfers are blocked until ICO is finished.
+    bool public isFrozen = true;
+
     // Token migration variables
     address public migrationMaster;
     address public migrationAgent;
@@ -41,6 +44,30 @@ contract GVTToken is StandardToken {
         balances[holder] += value;
         totalSupply += value;
         Transfer(0x0, holder, value);
+    }
+
+    // Allow token transfer.
+    function unfreeze() external {
+      require(msg.sender == ico);
+      isFrozen = false;
+    }
+
+    // ERC20 functions
+    // =========================
+
+    function transfer(address _to, uint _value) public returns (bool) {
+      require(!isFrozen);
+      return super.transfer(_to, _value);
+    }
+
+    function transferFrom(address _from, address _to, uint _value) public returns (bool) {
+      require(!isFrozen);
+      return super.transferFrom(_from, _to, _value);
+    }
+
+    function approve(address _spender, uint _value) public returns (bool) {
+      require(!isFrozen);
+      return super.approve(_spender, _value);
     }
 
     // Token migration
