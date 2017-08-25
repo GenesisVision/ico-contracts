@@ -19,7 +19,7 @@ contract('GVOptionProgram', function (accounts) {
         ICO.deployed().then((_ico) => {
             ico = _ico;
             return ico.initOptionProgram()
-        })        
+        })
         .then(() => {            
             return ico.startOptionsSelling()
         })

@@ -1,24 +1,28 @@
 pragma solidity ^0.4.11;
 
-import './GVTToken.sol';
+import './Initable.sol';
+import 'zeppelin-solidity/contracts/token/ERC20Basic.sol';
 
 // Time-locked wallet for Genesis Vision team tokens
-contract GVTTeamAllocator {
+contract GVTTeamAllocator is Initable {
     // Address of team member to allocations mapping
     mapping (address => uint256) allocations;
 
-    GVTToken gvt;
+    ERC20Basic gvt;
 
     uint unlockedAt;
 
     uint tokensForAlocation;
 
-    function GVTTeamAllocator(GVTToken _gvt) {
-        gvt = _gvt;
+    function GVTTeamAllocator() {
         unlockedAt = now + 12 * 30 days;
 
         //ToDo Fill allocations table
         //allocations[0x0] = 50; 50% of team tokens
+    }
+
+    function init(address token) {
+        gvt = ERC20Basic(token);
     }
 
     // Unlock team member's tokens by transferring them to his address

@@ -1,3 +1,4 @@
+const TeamAllocator = artifacts.require("./GVTTeamAllocator.sol");
 const ICO = artifacts.require("./ICO.sol");
 
 module.exports = function(deployer, network, accounts) {
@@ -5,5 +6,8 @@ module.exports = function(deployer, network, accounts) {
     const gvAgent = accounts[0];
     const migrationMaster = accounts[0];
 
-    deployer.deploy(ICO, gvAgent, team, migrationMaster);
+    deployer.deploy(TeamAllocator)
+    .then(() => {
+        return deployer.deploy(ICO, gvAgent, team, migrationMaster, TeamAllocator.address);
+    })
 };

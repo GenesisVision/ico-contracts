@@ -15,22 +15,18 @@ contract('ICO', function (accounts) {
 
     before('setup', (done) => {
         ICO.deployed().then((_ico) => {
-            ico = _ico;
-            return ico.gvtToken.call();
-        })
-        .then((_gvt) => {
-            gvt = GVT.at(_gvt);
-        })
-        .then(() => {
+            ico = _ico;            
             return ico.teamAllocator.call();
         })
         .then((_teamAllocator) => {
             teamAllocator = ALLOCATOR.at(_teamAllocator);
-        })
-        .then(() => {
             return ico.initOptionProgram()
+        })   
+        .then(() => {
+            return ico.gvtToken.call();
         })
-        .then(() => {            
+        .then((_gvt) => {
+            gvt = GVT.at(_gvt);
             return ico.startOptionsSelling()
         })
         .then(() => {

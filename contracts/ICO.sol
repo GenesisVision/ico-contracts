@@ -2,7 +2,7 @@ pragma solidity ^0.4.11;
 
 import './GVTToken.sol';
 import './GVOptionProgram.sol';
-import './GVTTeamAllocator.sol';
+import './Initable.sol';
 
 // Crowdfunding code for Genesis Vision Project
 contract ICO {
@@ -24,7 +24,8 @@ contract ICO {
 
     GVTToken public gvtToken;
     GVOptionProgram public optionProgram;
-    GVTTeamAllocator public teamAllocator;
+    Initable public teamAllocator;
+    address public migrationMaster;
 
     // Modifiers
     modifier teamOnly { require(msg.sender == team); _; }
@@ -37,22 +38,23 @@ contract ICO {
     IcoState public icoState = IcoState.Created;
 
     // Constructor
-    function ICO( address _team, address _gvAgent, address _migrationMaster) {
-        gvtToken = new GVTToken(this, _migrationMaster);
+    function ICO(address _team, address _gvAgent, address _migrationMaster, address _teamAllocator) {
         gvAgent = _gvAgent;
         team = _team;
-        teamAllocator = new GVTTeamAllocator(gvtToken);
+        teamAllocator = Initable(_teamAllocator);
+        migrationMaster = _migrationMaster;
     }
 
     // Initialize Option Program contract
     function initOptionProgram() external teamOnly {
         if (optionProgram == address(0)) {
             optionProgram = new GVOptionProgram(this, gvAgent, team);
+            gvtToken = new GVTToken(this, migrationMaster);
+            teamAllocator.init(gvtToken);
         }
     }
 
     // ICO and Option Program state management
-
     function startOptionsSelling() external teamOnly {
         require(icoState == IcoState.Created || icoState == IcoState.Paused);
         // Check if Option Program is initialized
@@ -66,6 +68,7 @@ contract ICO {
     function startIcoForOptionsHolders() external teamOnly {
         require(icoState == IcoState.RunningOptionsSelling || icoState == IcoState.Paused);
         optionProgram.finishOptionsSelling();
+       
         icoState = IcoState.RunningForOptionsHolders;
         StartICOForOptionsHolders();
     }
@@ -87,8 +90,7 @@ contract ICO {
         icoState = IcoState.Finished;
 
         uint mintedTokens = gvtToken.totalSupply();
-        if(mintedTokens > 0)
-        {
+        if (mintedTokens > 0) {
             uint totalAmount = mintedTokens * 4 / 3;              // 125% tokens
             gvtToken.mint(teamAllocator, 11 * totalAmount / 100); // 11% for team to the time-locked wallet
             gvtToken.mint(_fund, totalAmount / 20);               // 5% for Genesis Vision fund
@@ -101,15 +103,13 @@ contract ICO {
 
     // Buy GVT without options
     function buyTokens(address buyer, uint usdCents, string txHash)
-    external gvAgentOnly
-    returns (uint) {
+        external gvAgentOnly returns (uint) {
         return buyTokensInternal(buyer, usdCents, txHash);
     }
 
     // Buy GVT for option holders. At first buy GVT with option execution, then buy GVT in regular way if ICO is running
     function buyTokensByOptions(address buyer, uint usdCents, string txHash)
-        external gvAgentOnly
-        returns (uint) {
+        external gvAgentOnly returns (uint) {
         require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
         require(usdCents > 0);
 
@@ -136,16 +136,14 @@ contract ICO {
 
     // Buy GVOT during the Option Program
     function buyOptions(address buyer, uint usdCents, string txHash)
-        external gvAgentOnly
-    {
+        external gvAgentOnly {
         require(icoState == IcoState.RunningOptionsSelling);
         optionProgram.buyOptions(buyer, usdCents, txHash);
     }
 
     // Internal buy GVT without options
     function buyTokensInternal(address buyer, uint usdCents, string txHash)
-    internal
-    returns (uint) {
+    internal returns (uint) {
         require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
         require(usdCents > 0);
         uint tokens = usdCents * 1e16;

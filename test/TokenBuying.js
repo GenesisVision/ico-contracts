@@ -14,13 +14,13 @@ contract('ICO', function (accounts) {
     before('setup', (done) => {
         ICO.deployed().then((_ico) => {
             ico = _ico;
-            return ico.gvtToken.call();
-        })
-        .then((_gvt) => {
-            gvt = GVT.at(_gvt);
             return ico.initOptionProgram()
         })
-        .then(() => {            
+        .then(() => {
+            return ico.gvtToken.call();
+        })
+        .then((_gvt) => {   
+            gvt = GVT.at(_gvt);            
             return ico.startOptionsSelling()
         })
         .then(() => {
