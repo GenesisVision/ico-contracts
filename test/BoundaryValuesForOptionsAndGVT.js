@@ -45,7 +45,7 @@ contract('ICO', function (accounts) {
                 return gvOptionToken30.balanceOf.call(account1)
             })
             .then((b) => {
-                assert.equal(130000000000000100000, b.valueOf(), "Balance Options 30% should be 130");
+                assert.equal(130 * 1e18, b.valueOf(), "Balance Options 30% should be 130");
                 return ico.startIcoForOptionsHolders();
             })
             .then(() => {
@@ -58,7 +58,7 @@ contract('ICO', function (accounts) {
                 return gvt.balanceOf.call(account1)
             })
             .then((b) => {
-                assert.equal(260000000000000100000, b.valueOf(), "Balance GVT should be 260");
+                assert.equal(26001 * 1e16, b.valueOf(), "Balance GVT should be 260"); // 0.001 GVT per excess cent
             })
             .then(() => {
                 return gvOptionToken30.balanceOf.call(account1)

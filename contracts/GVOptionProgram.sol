@@ -5,9 +5,9 @@ import './GVOptionToken.sol';
 contract GVOptionProgram {
 
     // Constants
-    uint constant option30perCent = 260000000000000200; // GVOT30 tokens per cent during option purchase 
-    uint constant option20perCent = 240000000000001500; // GVOT20 tokens per cent during option purchase
-    uint constant option10perCent = 220000000000000900; // GVOT10 tokens per cent during option purchase
+    uint constant option30perCent = 26 * 1e16; // GVOT30 tokens per cent during option purchase 
+    uint constant option20perCent = 24 * 1e16; // GVOT20 tokens per cent during option purchase
+    uint constant option10perCent = 22 * 1e16; // GVOT10 tokens per cent during option purchase
     uint constant token30perCent  = 13684210526315800;  // GVT tokens per cent during execution of GVOT30
     uint constant token20perCent  = 12631578947368500;  // GVT tokens per cent during execution of GVOT20
     uint constant token10perCent  = 11578947368421100;  // GVT tokens per cent during execution of GVOT10
