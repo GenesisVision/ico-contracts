@@ -30,7 +30,7 @@ contract GVOptionToken is StandardToken {
     }
 
     // Create tokens
-    function buyOptions(address buyer, uint value, string tx) optionProgramOnly {
+    function buyOptions(address buyer, uint value) optionProgramOnly {
         require(value > 0);
         require(totalSupply + value <= TOKEN_LIMIT);
 

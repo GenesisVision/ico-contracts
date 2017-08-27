@@ -1,5 +1,5 @@
 var ICO = artifacts.require("./ICO.sol");
-var GVT = artifacts.require("./GVTToken.sol");
+var GVT = artifacts.require("./GVToken.sol");
 
 contract('ICO', function (accounts) {
     var account = accounts[0];
@@ -17,7 +17,7 @@ contract('ICO', function (accounts) {
             return ico.initOptionProgram()
         })
         .then(() => {
-            return ico.gvtToken.call();
+            return ico.gvToken.call();
         })
         .then((_gvt) => {   
             gvt = GVT.at(_gvt);            
@@ -34,13 +34,13 @@ contract('ICO', function (accounts) {
         });
     });
 
-    it("should buy 30kk tokens per 30kk usd", () => {
-        return ico.buyTokens(account1, 3 * 1e9, "test")
+    it("should buy 33kk tokens per 33kk usd", () => {
+        return ico.buyTokens(account1, 33 * 1e8, "test")
             .then(() => {
                 return gvt.balanceOf.call(account1)
             })
             .then((b) => {
-                assert.equal(3 * 1e7 * 1e18, b.valueOf(), "Balance should be 30kk");
+                assert.equal(33 * 1e6 * 1e18, b.valueOf(), "Balance should be 33kk");
             })
             .then(() => {
                 return ico.finishIco(account2, account3);
@@ -49,7 +49,7 @@ contract('ICO', function (accounts) {
                 return gvt.totalSupply();
             })
             .then((s) => {
-                assert.equal(4 * 1e7 * 1e18, s.valueOf(), "Total emitted GVT should be 40kk");
+                assert.equal(44 * 1e6 * 1e18, s.valueOf(), "Total emitted GVT should be 44kk");
             });
         })
     });

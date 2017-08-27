@@ -16,6 +16,12 @@ contract('ICO', function (accounts) {
             .then((s) => {
                 assert.equal(0, s.valueOf(), "State should be 0");
             })
+            .then(() => {
+                return ico.isPaused.call();
+            })
+            .then((p) => {
+                assert.equal(false, p.valueOf(), "ICO should be unpaused");
+            })
     });
 
     it("should be running options selling", () => {
@@ -29,6 +35,12 @@ contract('ICO', function (accounts) {
             .then((s) => {
                 assert.equal(1, s.valueOf(), "State should be 1");
             })
+            .then(() => {
+                return ico.isPaused.call();
+            })
+            .then((p) => {
+                assert.equal(false, p.valueOf(), "ICO should be unpaused");
+            })
     });
 
     it("should be running options program after finish selling", () => {
@@ -38,6 +50,12 @@ contract('ICO', function (accounts) {
             })
             .then((s) => {
                 assert.equal(2, s.valueOf(), "State should be 2");
+            })
+            .then(() => {
+                return ico.isPaused.call();
+            })
+            .then((p) => {
+                assert.equal(false, p.valueOf(), "ICO should be unpaused");
             })
     });
 
@@ -49,6 +67,12 @@ contract('ICO', function (accounts) {
             .then((s) => {
                 assert.equal(3, s.valueOf(), "State should be 3");
             })
+            .then(() => {
+                return ico.isPaused.call();
+            })
+            .then((p) => {
+                assert.equal(false, p.valueOf(), "ICO should be unpaused");
+            })
     });
 
     it("should be paused after pause", () => {
@@ -57,7 +81,29 @@ contract('ICO', function (accounts) {
                 return ico.icoState.call();
             })
             .then((s) => {
-                assert.equal(4, s.valueOf(), "State should be 4");
+                assert.equal(3, s.valueOf(), "State should be 3");
+            })
+            .then(() => {
+                return ico.isPaused.call();
+            })
+            .then((p) => {
+                assert.equal(true, p.valueOf(), "ICO should be paused");
+            })
+    });
+
+    it("should be unpaused after resume", () => {
+        return ico.resumeIco()
+            .then(() => {
+                return ico.icoState.call();
+            })
+            .then((s) => {
+                assert.equal(3, s.valueOf(), "State should be 3");
+            })
+            .then(() => {
+                return ico.isPaused.call();
+            })
+            .then((p) => {
+                assert.equal(false, p.valueOf(), "ICO should be paused");
             })
     });
 
@@ -67,7 +113,7 @@ contract('ICO', function (accounts) {
                 return ico.icoState.call();
             })
             .then((s) => {
-                assert.equal(5, s.valueOf(), "State should be 5");
+                assert.equal(4, s.valueOf(), "State should be 4");
             })
     });
 });

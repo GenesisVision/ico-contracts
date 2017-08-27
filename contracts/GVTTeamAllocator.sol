@@ -12,7 +12,7 @@ contract GVTTeamAllocator is Initable {
 
     uint unlockedAt;
 
-    uint tokensForAlocation;
+    uint tokensForAllocation;
 
     function GVTTeamAllocator() {
         unlockedAt = now + 12 * 30 days;
@@ -30,12 +30,12 @@ contract GVTTeamAllocator is Initable {
         require (now >= unlockedAt);
 
         // Update total number of locked tokens with the first unlock attempt
-        if (tokensForAlocation == 0)
-            tokensForAlocation = gvt.balanceOf(this);
+        if (tokensForAllocation == 0)
+            tokensForAllocation = gvt.balanceOf(this);
 
         var allocation = allocations[msg.sender];
         allocations[msg.sender] = 0;
-        var amount = tokensForAlocation * allocation / 100;
+        var amount = tokensForAllocation * allocation / 100;
 
         if (!gvt.transfer(msg.sender, amount)) throw;
     }

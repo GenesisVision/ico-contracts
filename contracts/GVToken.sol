@@ -7,13 +7,13 @@ contract MigrationAgent {
     function migrateFrom(address _from, uint256 _value);
 }
 
-contract GVTToken is StandardToken {
+contract GVToken is StandardToken {
     
     // Constants
     string public constant name = "Genesis Vision Token";
     string public constant symbol = "GVT";
     uint   public constant decimals = 18;
-    uint constant TOKEN_LIMIT = 4 * 1e7 * 1e18; 
+    uint   constant TOKEN_LIMIT = 44 * 1e6 * 1e18; 
     
     address public ico;
 
@@ -28,7 +28,7 @@ contract GVTToken is StandardToken {
     event Migrate(address indexed _from, address indexed _to, uint256 _value);
 
     // Constructor
-    function GVTToken(address _ico, address _migrationMaster) {
+    function GVToken(address _ico, address _migrationMaster) {
         require(_ico != 0);
         require(_migrationMaster != 0);
         ico = _ico;
@@ -47,7 +47,7 @@ contract GVTToken is StandardToken {
     }
 
     // Allow token transfer.
-    function unfreeze() external {
+    function unfreeze() {
       require(msg.sender == ico);
       isFrozen = false;
     }

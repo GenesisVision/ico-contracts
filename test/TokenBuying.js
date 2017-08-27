@@ -1,5 +1,5 @@
 var ICO = artifacts.require("./ICO.sol");
-var GVT = artifacts.require("./GVTToken.sol");
+var GVT = artifacts.require("./GVToken.sol");
 
 contract('ICO', function (accounts) {
     var account = accounts[0];
@@ -17,7 +17,7 @@ contract('ICO', function (accounts) {
             return ico.initOptionProgram()
         })
         .then(() => {
-            return ico.gvtToken.call();
+            return ico.gvToken.call();
         })
         .then((_gvt) => {   
             gvt = GVT.at(_gvt);            
