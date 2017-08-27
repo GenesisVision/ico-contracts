@@ -37,6 +37,6 @@ contract GVTTeamAllocator is Initable {
         allocations[msg.sender] = 0;
         var amount = tokensForAllocation * allocation / 100;
 
-        if (!gvt.transfer(msg.sender, amount)) throw;
+        if (!gvt.transfer(msg.sender, amount)) revert();
     }
 }
