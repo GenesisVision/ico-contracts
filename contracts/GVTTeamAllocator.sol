@@ -9,19 +9,19 @@ contract GVTTeamAllocator is Initable {
     mapping (address => uint256) allocations;
 
     ERC20Basic gvt;
-
     uint unlockedAt;
-
     uint tokensForAllocation;
+    address owner;
 
     function GVTTeamAllocator() {
         unlockedAt = now + 12 * 30 days;
-
+        owner = msg.sender;
         //ToDo Fill allocations table
         //allocations[0x0] = 50; 50% of team tokens
     }
 
     function init(address token) {
+        require(msg.sender == owner);
         gvt = ERC20Basic(token);
     }
 
@@ -37,6 +37,8 @@ contract GVTTeamAllocator is Initable {
         allocations[msg.sender] = 0;
         var amount = tokensForAllocation * allocation / 100;
 
-        if (!gvt.transfer(msg.sender, amount)) revert();
+        if (!gvt.transfer(msg.sender, amount)) {
+            revert();
+        }
     }
 }

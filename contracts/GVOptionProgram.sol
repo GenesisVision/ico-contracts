@@ -50,9 +50,8 @@ contract GVOptionProgram {
         ico = _ico;
     }
 
-    //Get ramaining tokens for all types of option tokens
-    function getBalance() public 
-        returns (uint, uint, uint) {
+    // Get ramaining tokens for all types of option tokens
+    function getBalance() public returns (uint, uint, uint) {
         return (gvOptionToken30.remainingTokensCount(), gvOptionToken20.remainingTokensCount(), gvOptionToken10.remainingTokensCount());
     }
 
@@ -79,8 +78,7 @@ contract GVOptionProgram {
     }
 
     // Buy option tokens. Proirity: GVOT30 -> GVOT20 -> GVOT10
-    function buyOptions(address buyer, uint usdCents, string txHash)
-        icoOnly {
+    function buyOptions(address buyer, uint usdCents, string txHash) icoOnly {
         require(usdCents > 0);
 
         var remainUsdCents = buyIfAvailable(buyer, usdCents, txHash, gvOptionToken30, 0, option30perCent);

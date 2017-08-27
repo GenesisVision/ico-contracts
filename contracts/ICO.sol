@@ -45,14 +45,13 @@ contract ICO {
         team = _team;
         teamAllocator = Initable(_teamAllocator);
         migrationMaster = _migrationMaster;
+        gvToken = new GVToken(this, migrationMaster);
     }
 
     // Initialize Option Program contract
     function initOptionProgram() external teamOnly {
         if (optionProgram == address(0)) {
             optionProgram = new GVOptionProgram(this, gvAgent, team);
-            gvToken = new GVToken(this, migrationMaster);
-            teamAllocator.init(gvToken);
         }
     }
 
