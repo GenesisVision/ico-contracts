@@ -5,12 +5,12 @@ import './GVOptionToken.sol';
 contract GVOptionProgram {
 
     // Constants
-    uint constant option30perCent = 26 * 1e16; // GVOT30 tokens per cent during option purchase 
-    uint constant option20perCent = 24 * 1e16; // GVOT20 tokens per cent during option purchase
-    uint constant option10perCent = 22 * 1e16; // GVOT10 tokens per cent during option purchase
-    uint constant token30perCent  = 13684210526315800;  // GVT tokens per cent during execution of GVOT30
-    uint constant token20perCent  = 12631578947368500;  // GVT tokens per cent during execution of GVOT20
-    uint constant token10perCent  = 11578947368421100;  // GVT tokens per cent during execution of GVOT10
+    uint constant option30perCent = 26 * 1e16; // GVOT30 tokens per usd cent during option purchase 
+    uint constant option20perCent = 24 * 1e16; // GVOT20 tokens per usd cent during option purchase
+    uint constant option10perCent = 22 * 1e16; // GVOT10 tokens per usd cent during option purchase
+    uint constant token30perCent  = 13684210526315800;  // GVT tokens per usd cent during execution of GVOT30
+    uint constant token20perCent  = 12631578947368500;  // GVT tokens per usd cent during execution of GVOT20
+    uint constant token10perCent  = 11578947368421100;  // GVT tokens per usd cent during execution of GVOT10
 
     string public constant option30name = "30% GVOT";
     string public constant option20name = "20% GVOT";
@@ -50,12 +50,12 @@ contract GVOptionProgram {
         ico = _ico;
     }
 
-    // Get ramaining tokens for all types of option tokens
+    // Get remaining tokens for all types of option tokens
     function getBalance() public returns (uint, uint, uint) {
         return (gvOptionToken30.remainingTokensCount(), gvOptionToken20.remainingTokensCount(), gvOptionToken10.remainingTokensCount());
     }
 
-    // Execute options during the ICO token purchase. Proirity: GVOT30 -> GVOT20 -> GVOT10
+    // Execute options during the ICO token purchase. Priority: GVOT30 -> GVOT20 -> GVOT10
     function executeOptions(address buyer, uint usdCents, string txHash) icoOnly
         returns (uint executedTokens, uint remainingCents) {
         require(usdCents > 0);
