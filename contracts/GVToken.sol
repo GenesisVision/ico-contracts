@@ -48,26 +48,27 @@ contract GVToken is StandardToken {
 
     // Allow token transfer.
     function unfreeze() {
-      require(msg.sender == ico);
-      isFrozen = false;
+        require(msg.sender == ico);
+        isFrozen = false;
     }
 
     // ERC20 functions
     // =========================
 
     function transfer(address _to, uint _value) public returns (bool) {
-      require(!isFrozen);
-      return super.transfer(_to, _value);
+        require(_to != address(0));
+        require(!isFrozen);
+        return super.transfer(_to, _value);
     }
 
     function transferFrom(address _from, address _to, uint _value) public returns (bool) {
-      require(!isFrozen);
-      return super.transferFrom(_from, _to, _value);
+        require(!isFrozen);
+        return super.transferFrom(_from, _to, _value);
     }
 
     function approve(address _spender, uint _value) public returns (bool) {
-      require(!isFrozen);
-      return super.approve(_spender, _value);
+        require(!isFrozen);
+        return super.approve(_spender, _value);
     }
 
     // Token migration

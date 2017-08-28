@@ -103,7 +103,9 @@ contract GVOptionProgram {
         var optionsAmount = usdCents * optionPerCent;
         executedTokens = optionToken.executeOption(buyer, optionsAmount);
         remainingCents = usdCents - (executedTokens / optionPerCent);
-        ExecuteOptions(buyer, executedTokens, txHash, optionType);
+        if (executedTokens > 0) {
+            ExecuteOptions(buyer, executedTokens, txHash, optionType);
+        }
         return (executedTokens, remainingCents);
     }
 
