@@ -97,10 +97,10 @@ contract ICO {
 
         uint mintedTokens = gvToken.totalSupply();
         if (mintedTokens > 0) {
-            uint totalAmount = mintedTokens * 4 / 3;              // 125% tokens
-            gvToken.mint(teamAllocator, 11 * totalAmount / 100); // 11% for team to the time-locked wallet
-            gvToken.mint(_fund, totalAmount / 20);               // 5% for Genesis Vision fund
-            gvToken.mint(_bounty, 9 * totalAmount / 100);        // 9% for Advisers, Marketing, Bounty
+            uint totalAmount = mintedTokens * 4 / 3;              // 75% of total tokens are for sale, get 100%
+            gvToken.mint(teamAllocator, 11 * totalAmount / 100);  // 11% for team to the time-locked wallet
+            gvToken.mint(_fund, totalAmount / 20);                // 5% for Genesis Vision fund
+            gvToken.mint(_bounty, 9 * totalAmount / 100);         // 9% for Advisers, Marketing, Bounty
             gvToken.unfreeze();
         }
         
@@ -110,6 +110,7 @@ contract ICO {
     // Buy GVT without options
     function buyTokens(address buyer, uint usdCents, string txHash)
         external gvAgentOnly returns (uint) {
+        require(icoState == IcoState.Running);
         require(!isPaused);
         return buyTokensInternal(buyer, usdCents, txHash);
     }
@@ -153,7 +154,7 @@ contract ICO {
     // Internal buy GVT without options
     function buyTokensInternal(address buyer, uint usdCents, string txHash)
     private returns (uint) {
-        require(icoState == IcoState.Running || icoState == IcoState.RunningForOptionsHolders);
+        //ICO state is checked in external functions, which call this function        
         require(usdCents > 0);
         uint tokens = usdCents * 1e16;
         require(tokensSold + tokens <= TOKENS_FOR_SALE);
