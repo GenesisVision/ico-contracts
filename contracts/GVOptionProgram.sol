@@ -77,7 +77,7 @@ contract GVOptionProgram {
         return (executedTokens + executed20 + executed10, remainingCents);
     }
 
-    // Buy option tokens. Proirity: GVOT30 -> GVOT20 -> GVOT10
+    // Buy option tokens. Priority: GVOT30 -> GVOT20 -> GVOT10
     function buyOptions(address buyer, uint usdCents, string txHash) icoOnly {
         require(usdCents > 0);
 
