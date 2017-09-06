@@ -10,7 +10,7 @@ module.exports = function(deployer, network, accounts) {
 
     deployer.deploy(TeamAllocator)
     .then(() => {
-        return deployer.deploy(ICO, gvAgent, team, migrationMaster, TeamAllocator.address);
+        return deployer.deploy(ICO, team, gvAgent, migrationMaster, TeamAllocator.address);
     })
     .then(() => {
         return ICO.deployed();
