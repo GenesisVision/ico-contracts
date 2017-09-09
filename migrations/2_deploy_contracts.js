@@ -13,7 +13,7 @@ function testDeployment(deployer, network, accounts){
     const team = accounts[0];
     const gvAgent = accounts[0];
     const migrationMaster = accounts[0]; 
-    const TeamAllocatorExample = artifacts.require("./GVTTeamAllocator.sol");
+    const TeamAllocatorExample = artifacts.require("./GVTTeamAllocatorExample.sol");
 
     var gvToken;
 

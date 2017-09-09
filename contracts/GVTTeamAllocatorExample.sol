@@ -14,7 +14,7 @@ contract GVTTeamAllocatorExample is Initable {
     address owner;
 
     function GVTTeamAllocatorExample(address account1, address account2, address account3) {
-        unlockedAt = now + 12 * 30 days;
+        unlockedAt = now + 12 * 30 days; // approximately 1 year
         owner = msg.sender;
         
         allocations[account1] = 60;
