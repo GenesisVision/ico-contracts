@@ -72,10 +72,6 @@ contract('ICO', function (accounts) {
 });
 
 
-
-
-
-
 var ICO = artifacts.require("./ICO.sol");
 var GVT = artifacts.require("./GVToken.sol");
 
@@ -114,6 +110,7 @@ contract('ICO', function (accounts) {
 
     it("Time change", () => {
         console.log(web3);
+        // utils.increaseTime(start - web3.eth.getBlock(web3.eth.blockNumber).timestamp + 10)
         return web3.currentProvider.send({jsonrpc: "2.0", method: "evm_increaseTime", params: [60 * 60 * 24 * 365], id: 0});
     });
 

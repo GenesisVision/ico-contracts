@@ -13,13 +13,14 @@ function testDeployment(deployer, network, accounts){
     const team = accounts[0];
     const gvAgent = accounts[0];
     const migrationMaster = accounts[0];
-    const MigrationaAgentExample = artifacts.require("./MigrationAgentExample.sol");
+    const MigrationAgentExample = artifacts.require("./MigrationAgentExample.sol");
+    const TeamAllocatorExample = artifacts.require("./GVTTeamAllocator.sol");
 
     var gvToken;
 
-    deployer.deploy(TeamAllocator)
+    deployer.deploy(TeamAllocatorExample)
     .then(() => {
-        return deployer.deploy(ICO, team, gvAgent, migrationMaster, TeamAllocator.address);
+        return deployer.deploy(ICO, team, gvAgent, migrationMaster, TeamAllocatorExample.address);
     })
     .then(() => {
         return ICO.deployed();
@@ -29,16 +30,16 @@ function testDeployment(deployer, network, accounts){
     })
     .then((_gvToken) => {
         gvToken = _gvToken;
-        return TeamAllocator.deployed();
+        return TeamAllocatorExample.deployed();
     })
     .then((ta) => {
         return ta.init(gvToken);
     })
     .then(() => {
-        return deployer.deploy(MigrationaAgentExample, gvToken);
+        return deployer.deploy(MigrationAgentExample, gvToken);
     })
     .then(() => {
-        return MigrationaAgentExample.deployed();
+        return MigrationAgentExample.deployed();
     });
 }
 
