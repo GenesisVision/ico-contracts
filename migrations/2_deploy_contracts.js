@@ -12,8 +12,7 @@ module.exports = function(deployer, network, accounts) {
 function testDeployment(deployer, network, accounts){
     const team = accounts[0];
     const gvAgent = accounts[0];
-    const migrationMaster = accounts[0];
-    const MigrationAgentExample = artifacts.require("./MigrationAgentExample.sol");
+    const migrationMaster = accounts[0]; 
     const TeamAllocatorExample = artifacts.require("./GVTTeamAllocator.sol");
 
     var gvToken;
@@ -35,12 +34,6 @@ function testDeployment(deployer, network, accounts){
     .then((ta) => {
         return ta.init(gvToken);
     })
-    .then(() => {
-        return deployer.deploy(MigrationAgentExample, gvToken);
-    })
-    .then(() => {
-        return MigrationAgentExample.deployed();
-    });
 }
 
 function realDeployment(deployer, network, accounts){

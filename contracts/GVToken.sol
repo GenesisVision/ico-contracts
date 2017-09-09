@@ -4,7 +4,7 @@ import 'zeppelin-solidity/contracts/token/StandardToken.sol';
 
 // Migration Agent interface
 contract MigrationAgent {
-    function migrateFrom(address _from, uint256 _value);
+    function migrateFrom(address _from, uint _value);
 }
 
 contract GVToken is StandardToken {
@@ -23,9 +23,9 @@ contract GVToken is StandardToken {
     // Token migration variables
     address public migrationMaster;
     address public migrationAgent;
-    uint256 public totalMigrated;
+    uint public totalMigrated;
 
-    event Migrate(address indexed _from, address indexed _to, uint256 _value);
+    event Migrate(address indexed _from, address indexed _to, uint _value);
 
     // Constructor
     function GVToken(address _ico, address _migrationMaster) {
@@ -72,7 +72,7 @@ contract GVToken is StandardToken {
     }
 
     // Token migration
-    function migrate(uint256 value) external {
+    function migrate(uint value) external {
         require(migrationAgent != 0);
         require(value > 0);
         require(value <= balances[msg.sender]);
