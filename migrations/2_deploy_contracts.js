@@ -17,7 +17,7 @@ function testDeployment(deployer, network, accounts){
 
     var gvToken;
 
-    deployer.deploy(TeamAllocatorExample)
+    deployer.deploy(TeamAllocatorExample, accounts[5], accounts[6], accounts[7])
     .then(() => {
         return deployer.deploy(ICO, team, gvAgent, migrationMaster, TeamAllocatorExample.address);
     })
