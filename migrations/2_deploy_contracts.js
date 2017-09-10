@@ -37,9 +37,9 @@ function testDeployment(deployer, network, accounts){
 }
 
 function realDeployment(deployer, network, accounts){
-    const team = accounts[0];
-    const gvAgent = accounts[0];
-    const migrationMaster = accounts[0];
+    const team =            '0x5e747502a1c426c1c217caCFA97b076Ce06aB9D6';
+    const gvAgent =         '0x4eF3cC88299C075623734990baA272a2ed39939F';
+    const migrationMaster = '0xb3B9adB05fd11Db68ffCC036E3EB7AC476A17Ee6';
 
     var gvToken;
 
