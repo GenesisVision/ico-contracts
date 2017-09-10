@@ -124,7 +124,25 @@ contract('ICO Team Allocator', function (accounts) {
             return gvt.balanceOf.call(accounts[5])
         })
         .then((b) => {
-            assert.equal((4840000 * 6 / 10) * 1e18, b.valueOf(), "Balance should be 108");
+            assert.equal((4840000 * 6 / 10) * 1e18, b.valueOf(), "Balance should be 60%");
+        })
+        .then(() => {
+            teamAllocator.unlock({from: accounts[6]})
+        })
+        .then(() => {
+            return gvt.balanceOf.call(accounts[6])
+        })
+        .then((b) => {
+            assert.equal((4840000 / 4) * 1e18, b.valueOf(), "Balance should be 25%");
+        })
+        .then(() => {
+            teamAllocator.unlock({from: accounts[7]})
+        })
+        .then(() => {
+            return gvt.balanceOf.call(accounts[7])
+        })
+        .then((b) => {
+            assert.equal((4840000 * 15 / 100) * 1e18, b.valueOf(), "Balance should be 15%");
         })
     });
 });
