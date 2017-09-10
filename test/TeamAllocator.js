@@ -118,12 +118,13 @@ contract('ICO Team Allocator', function (accounts) {
 
     it("team tokens should be available", () => {
         increaseTime(60 * 60 * 24 * 360);
+
         return teamAllocator.unlock({from: accounts[5]})
         .then(() => {
             return gvt.balanceOf.call(accounts[5])
         })
         .then((b) => {
-            assert.equal(108 * 1e18, b.valueOf(), "Balance should be 108");
+            assert.equal((4840000 * 6 / 10) * 1e18, b.valueOf(), "Balance should be 108");
         })
     });
 });
