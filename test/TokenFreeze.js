@@ -51,9 +51,6 @@ contract('ICO', function (accounts) {
 
     it("should not be able to transfer GVT before ICO finish", () => {
         return gvt.transfer(account1, 5)
-        .then(() => {
-            assert(false, "throw expected");
-          })
         .catch(() => {
             return gvt.balanceOf.call(account)
         })

@@ -52,9 +52,6 @@ contract('ICO', function (accounts) {
 
     it("should not be able to migrate tokens before agent set", () => {
         return gvt.migrate(5)
-            .then(() => {
-                assert(false, "throw expected");
-              })
             .catch(() => {
                 return true;
             })
@@ -93,9 +90,6 @@ contract('ICO', function (accounts) {
 
     it("should not be able to migrate more tokens that left", () => {
         return gvt.migrate(10 * 1e18)
-            .then(() => {
-                assert(false, "throw expected");
-              })
             .catch(() => {
                 return true;
             })
@@ -105,9 +99,6 @@ contract('ICO', function (accounts) {
         return migrationAgent.finalizeMigration()
             .then(() => {
                 return gvt.migrate(5);
-            })        
-            .then(() => {
-                assert(false, "throw expected");
             })
             .catch(() => {
                 return true;
