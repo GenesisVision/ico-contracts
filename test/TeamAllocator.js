@@ -58,7 +58,7 @@ contract('ICO Team Allocator', function (accounts) {
             });
     });
 
-    it("team tokens should be available", () => {
+    it("team tokens should not be available", () => {
         increaseTime(60 * 60 * 24 * 359);
 
         return teamAllocator.unlock({from: account1})
